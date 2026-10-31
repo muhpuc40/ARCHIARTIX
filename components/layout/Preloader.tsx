@@ -57,25 +57,24 @@ export function Preloader() {
       id="preloader"
       role="dialog"
       aria-modal="true"
-      aria-label="Loading ARCHIAETIX"
+      aria-label="Loading ARCHIARTIX"
       className="blueprint-bg fixed inset-0 z-[100] flex flex-col items-center justify-center bg-ink"
       initial={{ clipPath: "inset(0% 0% 0% 0%)" }}
-      animate={{ clipPath: exiting ? "inset(0% 0% 100% 0%)" : "inset(0% 0% 0% 0%)" }}
-      transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
-    >
+      animate={{
+        clipPath: exiting ? "inset(0% 0% 100% 0%)" : "inset(0% 0% 0% 0%)",
+      }}
+      transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}>
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="relative"
-      >
+        className="relative">
         <motion.div
           animate={reduce ? undefined : { scale: [1, 1.025, 1] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        >
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}>
           <Image
             src="/brand/logo-light.png"
-            alt="ARCHIAETIX — Art Meets Architecture"
+            alt="ARCHIARTIX — Art Meets Architecture"
             width={1076}
             height={703}
             priority

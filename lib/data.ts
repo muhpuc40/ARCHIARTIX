@@ -17,7 +17,7 @@ function warn(scope: string, error: unknown) {
   if (!warned) {
     warned = true;
     console.warn(
-      `[ARCHIAETIX] Supabase query failed (${scope}); falling back to sample content.`,
+      `[ARCHIARTIX] Supabase query failed (${scope}); falling back to sample content.`,
       error instanceof Error ? error.message : error,
     );
   }

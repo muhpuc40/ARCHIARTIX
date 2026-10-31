@@ -1,5 +1,5 @@
 -- =====================================================================
--- ARCHIAETIX — database schema
+-- ARCHIARTIX — database schema
 -- Run order in the Supabase SQL editor:  1) schema.sql  2) policies.sql  3) seed.sql
 -- Safe to re-run (idempotent).
 -- =====================================================================

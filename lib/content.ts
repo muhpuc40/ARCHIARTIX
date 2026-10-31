@@ -1,5 +1,5 @@
 /**
- * Marketing copy. Original text, written for ARCHIAETIX.
+ * Marketing copy. Original text, written for ARCHIARTIX.
  *
  * ⚠ Stats and team roles below are PLACEHOLDERS — replace with
  * real figures, real client quotes (with permission) and real team members
@@ -78,7 +78,7 @@ export const processSteps = [
 
 export const faqs = [
   {
-    q: "How does a project with ARCHIAETIX start?",
+    q: "How does a project with ARCHIARTIX start?",
     a: "It starts with a free discovery call. We discuss your goals, space, budget and timeline, then send a written proposal with scope, deliverables and a fixed design fee — usually within three working days.",
   },
   {
@@ -132,7 +132,7 @@ export const vision =
   "To be the studio Bangladesh turns to when it wants architecture and interiors that are rooted in place, designed with art and delivered with precision.";
 
 export const story = [
-  "ARCHIAETIX began with a simple belief: art and architecture should not be separate conversations. A building is a canvas for light, texture and proportion; an interior is where that art meets daily life.",
+  "ARCHIARTIX began with a simple belief: art and architecture should not be separate conversations. A building is a canvas for light, texture and proportion; an interior is where that art meets daily life.",
   "Today we are a team of architects, interior designers and site engineers working across Bangladesh — from city apartments to resort suites. We stay close to every project, from the first sketch to the last coat of paint.",
   "Alongside our design practice we run a small shop of architecture and design products we use and love, so clients can bring a piece of the studio home.",
 ];

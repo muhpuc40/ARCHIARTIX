@@ -11,11 +11,13 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Shop — Architecture & Design Products",
   description:
-    "Shop lighting, furniture, décor, surfaces and studio tools curated by ARCHIAETIX. Prices in BDT, delivery across Bangladesh, pay on delivery available.",
+    "Shop lighting, furniture, décor, surfaces and studio tools curated by ARCHIARTIX. Prices in BDT, delivery across Bangladesh, pay on delivery available.",
   path: "/shop",
 });
 
-type Props = { searchParams: Promise<{ category?: string; q?: string; sort?: string }> };
+type Props = {
+  searchParams: Promise<{ category?: string; q?: string; sort?: string }>;
+};
 const SORTS = ["newest", "price-asc", "price-desc", "name"] as const;
 
 export default async function ShopPage({ searchParams }: Props) {
@@ -23,9 +25,14 @@ export default async function ShopPage({ searchParams }: Props) {
   const query: ProductQuery = {
     category: sp.category || undefined,
     q: sp.q?.slice(0, 60) || undefined,
-    sort: (SORTS as readonly string[]).includes(sp.sort ?? "") ? (sp.sort as ProductQuery["sort"]) : "newest",
+    sort: (SORTS as readonly string[]).includes(sp.sort ?? "")
+      ? (sp.sort as ProductQuery["sort"])
+      : "newest",
   };
-  const [categories, products] = await Promise.all([getCategories("product"), getProducts(query)]);
+  const [categories, products] = await Promise.all([
+    getCategories("product"),
+    getProducts(query),
+  ]);
 
   return (
     <>
@@ -50,8 +57,12 @@ export default async function ShopPage({ searchParams }: Props) {
             <div className="flex flex-col items-center gap-5 border border-dashed border-neutral-300 py-24 text-center">
               <PackageSearch size={44} className="text-neutral-400" />
               <p className="font-serif text-2xl">Nothing matches your search</p>
-              <p className="max-w-sm text-sm text-neutral-600">Try a different keyword or clear the filters.</p>
-              <ButtonLink href="/shop" variant="outline">Clear filters</ButtonLink>
+              <p className="max-w-sm text-sm text-neutral-600">
+                Try a different keyword or clear the filters.
+              </p>
+              <ButtonLink href="/shop" variant="outline">
+                Clear filters
+              </ButtonLink>
             </div>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

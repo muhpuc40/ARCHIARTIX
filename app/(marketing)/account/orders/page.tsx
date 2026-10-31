@@ -4,12 +4,22 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireUser } from "@/lib/auth";
-import { formatBDT, formatDateTime, formatOrderNo, PAYMENT_LABELS } from "@/lib/format";
+import {
+  formatBDT,
+  formatDateTime,
+  formatOrderNo,
+  PAYMENT_LABELS,
+} from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
 import type { Order } from "@/lib/types";
 
-export const metadata = pageMetadata({ title: "My orders", description: "Your ARCHIAETIX order history.", path: "/account/orders", noindex: true });
+export const metadata = pageMetadata({
+  title: "My orders",
+  description: "Your ARCHIARTIX order history.",
+  path: "/account/orders",
+  noindex: true,
+});
 export const dynamic = "force-dynamic";
 
 export default async function OrdersPage() {
@@ -25,7 +35,14 @@ export default async function OrdersPage() {
 
   return (
     <>
-      <PageHeader title="My orders" crumbs={[{ name: "Account", href: "/account" }, { name: "Orders", href: "/account/orders" }]} compact />
+      <PageHeader
+        title="My orders"
+        crumbs={[
+          { name: "Account", href: "/account" },
+          { name: "Orders", href: "/account/orders" },
+        ]}
+        compact
+      />
       <section className="py-12 sm:py-16">
         <Container className="space-y-6">
           {orders.length === 0 ? (
@@ -39,24 +56,48 @@ export default async function OrdersPage() {
               <article key={o.id} className="border border-line">
                 <header className="flex flex-wrap items-center justify-between gap-4 bg-brand-cream px-6 py-4">
                   <div>
-                    <h2 className="font-sans text-lg font-bold">{formatOrderNo(o.order_no)}</h2>
-                    <p className="text-xs text-neutral-600">{formatDateTime(o.created_at)}</p>
+                    <h2 className="font-sans text-lg font-bold">
+                      {formatOrderNo(o.order_no)}
+                    </h2>
+                    <p className="text-xs text-neutral-600">
+                      {formatDateTime(o.created_at)}
+                    </p>
                   </div>
                   <div className="flex items-center gap-4">
                     <StatusBadge status={o.status} />
-                    <span className="font-serif text-xl font-bold">{formatBDT(o.total_bdt)}</span>
+                    <span className="font-serif text-xl font-bold">
+                      {formatBDT(o.total_bdt)}
+                    </span>
                   </div>
                 </header>
                 <ul className="divide-y divide-line px-6">
                   {o.order_items?.map((i) => (
-                    <li key={i.id} className="flex justify-between gap-4 py-3 text-sm">
-                      <span>{i.quantity} × {i.product_name}</span>
-                      <span className="font-semibold">{formatBDT(i.unit_price_bdt * i.quantity)}</span>
+                    <li
+                      key={i.id}
+                      className="flex justify-between gap-4 py-3 text-sm">
+                      <span>
+                        {i.quantity} × {i.product_name}
+                      </span>
+                      <span className="font-semibold">
+                        {formatBDT(i.unit_price_bdt * i.quantity)}
+                      </span>
                     </li>
                   ))}
                 </ul>
                 <p className="border-t border-line px-6 py-4 text-xs text-neutral-600">
-                  Deliver to: {o.shipping_address.name}, {o.shipping_address.address}, {o.shipping_address.city} · {o.shipping_address.phone} · {o.payment_method === "cod" ? "Cash on Delivery" : `Paid via ${PAYMENT_LABELS[o.payment_method]}`}{o.payment_ref ? ` (TrxID ${o.payment_ref})` : ""}{o.status === "pending" ? (o.payment_method === "cod" ? " · awaiting confirmation" : " · payment being verified") : ""} · delivery charge applicable
+                  Deliver to: {o.shipping_address.name},{" "}
+                  {o.shipping_address.address}, {o.shipping_address.city} ·{" "}
+                  {o.shipping_address.phone} ·{" "}
+                  {o.payment_method === "cod"
+                    ? "Cash on Delivery"
+                    : `Paid via ${PAYMENT_LABELS[o.payment_method]}`}
+                  {o.payment_ref ? ` (TrxID ${o.payment_ref})` : ""}
+                  {o.status === "pending"
+                    ? o.payment_method === "cod"
+                      ? " · awaiting confirmation"
+                      : " · payment being verified"
+                    : ""}{" "}
+                  · delivery charge applicable
                 </p>
               </article>
             ))

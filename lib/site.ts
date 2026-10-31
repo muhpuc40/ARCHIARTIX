@@ -7,11 +7,11 @@ const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").re
 const clean = (v: string | undefined) => (v && v.trim().length > 0 ? v.trim() : "");
 
 export const siteConfig = {
-  name: "ARCHIAETIX",
-  shortName: "Archiaetix",
+  name: "ARCHIARTIX",
+  shortName: "ARCHIARTIX",
   tagline: "Art Meets Architecture",
   description:
-    "ARCHIAETIX is an interior design and architecture studio in Bangladesh — designing and building residential, commercial and hospitality spaces, with a shop for architecture and design products.",
+    "ARCHIARTIX is an interior design and architecture studio in Bangladesh — designing and building residential, commercial and hospitality spaces, with a shop for architecture and design products.",
   url: siteUrl,
   locale: "en_BD",
   // digits only, country code included, e.g. 8801XXXXXXXXX
@@ -67,4 +67,4 @@ export function whatsappLink(text?: string) {
   return `https://api.whatsapp.com/send${q ? `?${q}` : ""}`;
 }
 
-export const WHATSAPP_GREETING = "Hi ARCHIAETIX, I'd like to discuss a project.";
+export const WHATSAPP_GREETING = "Hi ARCHIARTIX, I'd like to discuss a project.";

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     "turnkey interior execution",
     "residential interior design",
     "commercial interior design",
-    "ARCHIAETIX",
+    "ARCHIARTIX",
   ],
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,

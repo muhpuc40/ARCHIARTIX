@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Checkout",
-  description: "Complete your ARCHIAETIX shop order.",
+  description: "Complete your ARCHIARTIX shop order.",
   path: "/checkout",
   noindex: true,
 });
@@ -28,10 +28,21 @@ export default async function CheckoutPage() {
 
   return (
     <>
-      <PageHeader title="Checkout" crumbs={[{ name: "Cart", href: "/cart" }, { name: "Checkout", href: "/checkout" }]} compact />
+      <PageHeader
+        title="Checkout"
+        crumbs={[
+          { name: "Cart", href: "/cart" },
+          { name: "Checkout", href: "/checkout" },
+        ]}
+        compact
+      />
       <section className="py-12 sm:py-16">
         <Container>
-          <CheckoutForm defaultName={name} defaultPhone={phone} backendReady={isSupabaseConfigured} />
+          <CheckoutForm
+            defaultName={name}
+            defaultPhone={phone}
+            backendReady={isSupabaseConfigured}
+          />
         </Container>
       </section>
       <CartSync />

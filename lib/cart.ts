@@ -7,7 +7,7 @@ import type { CartLine } from "@/lib/types";
  * Client-side cart persisted in localStorage, exposed as an external store
  * (useSyncExternalStore) so it is hydration-safe and syncs across tabs.
  */
-const KEY = "archiaetix-cart-v1";
+const KEY = "archiartix-cart-v1";
 const EMPTY: CartLine[] = [];
 const MAX_QTY = 99;
 

@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Your Cart",
-  description: "Review the items in your ARCHIAETIX shop cart.",
+  description: "Review the items in your ARCHIARTIX shop cart.",
   path: "/cart",
   noindex: true,
 });
@@ -14,7 +14,11 @@ export const metadata = pageMetadata({
 export default function CartPage() {
   return (
     <>
-      <PageHeader title="Your cart" crumbs={[{ name: "Cart", href: "/cart" }]} compact />
+      <PageHeader
+        title="Your cart"
+        crumbs={[{ name: "Cart", href: "/cart" }]}
+        compact
+      />
       <section className="py-12 sm:py-16">
         <Container>
           <CartView />

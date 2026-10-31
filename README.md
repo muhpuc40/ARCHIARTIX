@@ -1,6 +1,6 @@
-# ARCHIAETIX — Art Meets Architecture
+# ARCHIARTIX — Art Meets Architecture
 
-Website, shop and admin panel for the ARCHIAETIX interior design & architecture studio.
+Website, shop and admin panel for the ARCHIARTIX interior design & architecture studio.
 
 **Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion · Supabase (Postgres, Auth, Storage) · Zod + React Hook Form.
 
@@ -11,7 +11,7 @@ The site runs **without Supabase** (sample content, WhatsApp checkout fallback) 
 ## 1. Run it locally (Windows PowerShell)
 
 ```powershell
-cd E:\ARCHIAETIX
+cd E:\ARCHIARTIX
 npm install
 copy .env.example .env.local
 npm run dev

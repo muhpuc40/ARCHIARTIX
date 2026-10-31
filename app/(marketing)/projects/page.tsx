@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Projects — Residential, Commercial & Hospitality",
   description:
-    "Explore ARCHIAETIX interior and architecture projects across Bangladesh: homes, offices, retail and hospitality spaces designed and delivered end to end.",
+    "Explore ARCHIARTIX interior and architecture projects across Bangladesh: homes, offices, retail and hospitality spaces designed and delivered end to end.",
   path: "/projects",
 });
 
@@ -20,8 +20,7 @@ export default async function ProjectsPage() {
         eyebrow="Portfolio"
         title="Projects that balance art and architecture"
         text="Homes, workplaces and hospitality spaces — each designed around the people who use them."
-        crumbs={[{ name: "Projects", href: "/projects" }]}
-      >
+        crumbs={[{ name: "Projects", href: "/projects" }]}>
         <ProjectFilters />
       </PageHeader>
       <ProjectGrid projects={projects} />

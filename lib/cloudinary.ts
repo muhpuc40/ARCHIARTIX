@@ -15,7 +15,7 @@ export function signUpload(opts: { folder: string; resourceType: "image" | "vide
   const timestamp = Math.floor(Date.now() / 1000);
   const params: Record<string, string | number> = {
     ...(opts.allowedFormats ? { allowed_formats: opts.allowedFormats } : {}),
-    folder: `archiaetix/${opts.folder}`,
+    folder: `archiartix/${opts.folder}`,
     timestamp,
   };
   const toSign = Object.keys(params)

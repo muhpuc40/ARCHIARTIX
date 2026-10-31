@@ -4,7 +4,7 @@ import { getProfile, getUser } from "@/lib/auth";
 import { isSupabaseConfigured } from "@/lib/env";
 
 export const metadata: Metadata = {
-  title: { default: "Admin", template: "%s | ARCHIAETIX Admin" },
+  title: { default: "Admin", template: "%s | ARCHIARTIX Admin" },
   robots: { index: false, follow: false },
 };
 export const dynamic = "force-dynamic";
@@ -15,7 +15,11 @@ export const dynamic = "force-dynamic";
  * don't re-run on client navigation — so every admin page calls requireAdmin() itself,
  * and proxy.ts redirects non-admins before they get here.
  */
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const user = isSupabaseConfigured ? await getUser() : null;
   const profile = user ? await getProfile() : null;
 

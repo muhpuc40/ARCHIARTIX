@@ -50,7 +50,7 @@ export function SideDrawer() {
         <div>
           <Image
             src="/brand/logo-light.png"
-            alt="ARCHIAETIX"
+            alt="ARCHIARTIX"
             width={1076}
             height={703}
             className="h-20 w-auto"

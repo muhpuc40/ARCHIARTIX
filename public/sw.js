@@ -1,6 +1,6 @@
-/* ARCHIAETIX service worker — static assets cached, pages network-first with an offline fallback.
+/* ARCHIARTIX service worker — static assets cached, pages network-first with an offline fallback.
    Never caches API, admin, auth, account, checkout or login responses. */
-const VERSION = "archiaetix-v1";
+const VERSION = "archiartix-v1";
 const STATIC = `${VERSION}-static`;
 const PAGES = `${VERSION}-pages`;
 const OFFLINE_URL = "/offline";

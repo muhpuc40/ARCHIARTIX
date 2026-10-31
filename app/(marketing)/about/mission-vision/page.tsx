@@ -8,7 +8,8 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Mission & Vision",
-  description: "What drives ARCHIAETIX: our mission to design calmer, brighter spaces in Bangladesh and our vision for place-rooted architecture and interiors.",
+  description:
+    "What drives ARCHIARTIX: our mission to design calmer, brighter spaces in Bangladesh and our vision for place-rooted architecture and interiors.",
   path: "/about/mission-vision",
 });
 
@@ -31,12 +32,29 @@ export default function MissionVisionPage() {
         <Container className="grid gap-6 lg:grid-cols-2">
           {blocks.map(({ Icon, label, text, dark }, i) => (
             <Reveal key={label} delay={i * 0.1}>
-              <article className={dark ? "h-full bg-ink p-10 text-white sm:p-14" : "h-full border border-line bg-brand-cream p-10 sm:p-14"}>
-                <span className={dark ? "grid h-16 w-16 place-items-center bg-brand-yellow text-ink" : "grid h-16 w-16 place-items-center bg-ink text-brand-yellow"}>
+              <article
+                className={
+                  dark
+                    ? "h-full bg-ink p-10 text-white sm:p-14"
+                    : "h-full border border-line bg-brand-cream p-10 sm:p-14"
+                }>
+                <span
+                  className={
+                    dark
+                      ? "grid h-16 w-16 place-items-center bg-brand-yellow text-ink"
+                      : "grid h-16 w-16 place-items-center bg-ink text-brand-yellow"
+                  }>
                   <Icon size={30} />
                 </span>
                 <h2 className="mt-8 font-serif text-4xl">{label}</h2>
-                <p className={dark ? "mt-5 text-lg leading-relaxed text-white/75" : "mt-5 text-lg leading-relaxed text-neutral-700"}>{text}</p>
+                <p
+                  className={
+                    dark
+                      ? "mt-5 text-lg leading-relaxed text-white/75"
+                      : "mt-5 text-lg leading-relaxed text-neutral-700"
+                  }>
+                  {text}
+                </p>
               </article>
             </Reveal>
           ))}

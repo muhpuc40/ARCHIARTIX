@@ -1,5 +1,5 @@
 -- =====================================================================
--- ARCHIAETIX — Row Level Security + Storage policies
+-- ARCHIARTIX — Row Level Security + Storage policies
 -- Run AFTER schema.sql. Safe to re-run.
 -- Principle: deny by default; every table has RLS enabled.
 -- =====================================================================
