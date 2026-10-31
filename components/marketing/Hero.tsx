@@ -1,28 +1,30 @@
 "use client";
 
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { HERO_TIMING } from "@/lib/hero-config";
+import type { HeroSlide } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-type NavigatorWithConnection = Navigator & { connection?: { saveData?: boolean } };
-
 /**
- * Home hero. Layer order (back → front):
- *   animated blueprint art  →  background video (deferred, optional)  →  overlay  →  content
- * The video only starts loading once the browser is idle, never on reduced-motion
- * or data-saver connections, and fades in only if NEXT_PUBLIC_HERO_VIDEO_URL (a Cloudinary video URL) is set.
+ * Home hero. Cycle (timings in lib/hero-config.ts):
+ *   animated hero (20s) → admin image 1 … N (10s each) → animated hero (20s) → repeat
+ * Without admin images only the animated hero is shown.
  */
-export function Hero() {
+export function Hero({ slides = [] }: { slides?: HeroSlide[] }) {
   const reduce = useReducedMotion();
-  const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const [videoReady, setVideoReady] = useState(false);
+  // -1 = animated hero, 0..n-1 = image index
+  const [phase, setPhase] = useState(-1);
+  // Not tied to "reduce motion": the slideshow is a slow opacity crossfade (no movement), and gating it on a
+  // browser-only value would also cause a server/client hydration mismatch.
+  const cycling = slides.length > 0;
+  const showingImage = cycling && phase >= 0;
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const markY = useTransform(scrollYProgress, [0, 1], [0, 140]);
@@ -30,33 +32,17 @@ export function Hero() {
   const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video || reduce) return;
-    if ((navigator as NavigatorWithConnection).connection?.saveData) return;
-
-    const src = process.env.NEXT_PUBLIC_HERO_VIDEO_URL;
-    if (!src) return;
-    const start = () => {
-      video.src = src;
-      video.load();
-      video.play().catch(() => undefined);
-    };
-    let idleId: number | undefined;
-    let timeoutId: number | undefined;
-    const w = window as Window & { requestIdleCallback?: typeof window.requestIdleCallback };
-    if (typeof w.requestIdleCallback === "function") idleId = w.requestIdleCallback(start, { timeout: 3000 });
-    else timeoutId = window.setTimeout(start, 1500);
-
-    return () => {
-      if (idleId !== undefined) w.cancelIdleCallback?.(idleId);
-      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
-    };
-  }, [reduce]);
+    if (!cycling) return;
+    const ms = (phase === -1 ? HERO_TIMING.animatedSeconds : HERO_TIMING.slideSeconds) * 1000;
+    const id = window.setTimeout(() => setPhase((p) => (p === -1 ? 0 : p + 1 >= slides.length ? -1 : p + 1)), ms);
+    return () => window.clearTimeout(id);
+  }, [cycling, phase, slides.length]);
 
   return (
     <section ref={sectionRef} className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-ink text-white">
-      {/* 1 — animated blueprint art (also the poster until/unless the video plays) */}
-      <div className="blueprint-bg absolute inset-0" aria-hidden />
+      {/* 1 — animated blueprint art (fades out while admin images show) */}
+      <div className={cn("absolute inset-0 transition-opacity duration-[1400ms]", showingImage && "opacity-0")} aria-hidden>
+      <div className="blueprint-bg absolute inset-0" />
       <svg
         className="draw-line absolute inset-0 h-full w-full"
         viewBox="0 0 1440 900"
@@ -70,33 +56,39 @@ export function Hero() {
         <circle cx="1040" cy="380" r="220" stroke="#fff" strokeOpacity=".1" strokeWidth="1.5" className="delay-3" style={{ ["--len" as string]: 1400 }} />
         <circle cx="1040" cy="380" r="320" stroke="#fff" strokeOpacity=".06" strokeWidth="1.5" className="delay-4" style={{ ["--len" as string]: 2100 }} />
       </svg>
-      <div className="absolute -right-40 top-1/4 h-[620px] w-[620px] rounded-full bg-brand-yellow/10 blur-[120px]" aria-hidden />
+      <div className="absolute -right-40 top-1/4 h-[620px] w-[620px] rounded-full bg-brand-yellow/10 blur-[120px]" />
+      </div>
 
-      {/* 2 — background video (deferred; optional) */}
-      <video
-        ref={videoRef}
-        muted
-        loop
-        playsInline
-        preload="none"
-        aria-hidden
-        tabIndex={-1}
-        onCanPlay={() => setVideoReady(true)}
-        onError={() => setVideoReady(false)}
-        className={cn(
-          "absolute inset-0 h-full w-full object-cover transition-opacity duration-[1400ms]",
-          videoReady ? "opacity-50" : "opacity-0",
-        )}
-      />
+      {/* 2 — admin images (crossfade; only the current one and the next are mounted) */}
+      {cycling &&
+        slides.map((slide, i) => {
+          const next = phase === -1 ? 0 : (phase + 1) % slides.length;
+          if (i !== phase && i !== next) return null;
+          return (
+            <div key={slide.id} className={cn("absolute inset-0 transition-opacity duration-[1400ms]", i === phase ? "opacity-100" : "opacity-0")} aria-hidden={i !== phase}>
+              <Image src={slide.image_url} alt={slide.caption || ""} fill priority={i === 0} sizes="100vw" className="object-cover" />
+            </div>
+          );
+        })}
 
       {/* 3 — overlay for legibility */}
-      <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/20" aria-hidden />
+      <div
+        className={cn(
+          "absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/20 transition-opacity duration-[1400ms]",
+          showingImage && "opacity-0",
+        )}
+        aria-hidden
+      />
+      <div
+        className={cn("absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/30 opacity-0 transition-opacity duration-[1400ms]", showingImage && "opacity-100")}
+        aria-hidden
+      />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" aria-hidden />
 
       {/* The "A" mark, floating on the right */}
       <motion.div
         style={{ y: reduce ? 0 : markY, opacity: fade }}
-        className="pointer-events-none absolute right-[4%] top-1/2 hidden -translate-y-1/2 lg:block"
+        className={cn("pointer-events-none absolute right-[4%] top-1/2 hidden -translate-y-1/2 transition-opacity duration-[1400ms] lg:block", showingImage && "!opacity-0")}
         aria-hidden
       >
         <motion.div
@@ -116,7 +108,7 @@ export function Hero() {
       </motion.div>
 
       {/* 4 — content */}
-      <Container className="relative z-10 pb-24 pt-36">
+      <Container className={cn("relative z-10 pb-24 pt-36 transition-opacity duration-[1400ms]", showingImage && "pointer-events-none opacity-0")}>
         <motion.div style={{ y: reduce ? 0 : contentY, opacity: fade }} className="max-w-3xl">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -160,22 +152,62 @@ export function Hero() {
             We design, build and furnish homes, workplaces and hospitality spaces across Bangladesh — precise in plan,
             expressive in detail, delivered on time.
           </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 3.1, ease }}
-            className="mt-10 flex flex-wrap gap-4"
-          >
-            <ButtonLink href="/contact?type=quote#quote" size="lg">
-              Start your project <ArrowRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
-            </ButtonLink>
-            <ButtonLink href="/projects" size="lg" variant="outline-light">
-              Explore projects
-            </ButtonLink>
-          </motion.div>
         </motion.div>
       </Container>
+
+      {/* Image phase: the caption sits exactly where the "Art Meets Architecture" title does */}
+      {cycling && (
+        <div
+          className={cn(
+            "absolute inset-0 z-10 flex items-center transition-opacity duration-[1400ms]",
+            showingImage ? "opacity-100" : "pointer-events-none opacity-0",
+          )}
+          aria-live="polite"
+        >
+          <Container className="pb-24 pt-36">
+            <div className="max-w-3xl">
+              {slides[phase]?.caption && (
+                <>
+                  <p className="mb-7 inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-brand-yellow sm:text-xs">
+                    <span className="h-px w-10 bg-brand-yellow" aria-hidden />
+                    Interior Design · Architecture · Bangladesh
+                  </p>
+                  <motion.h2
+                    key={phase}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.3, ease }}
+                    className="line-clamp-4 font-serif text-[clamp(2.4rem,7.5vw,6rem)] font-semibold leading-[1.02] tracking-tight text-white"
+                  >
+                    {slides[phase].caption}
+                  </motion.h2>
+                </>
+              )}
+            </div>
+          </Container>
+        </div>
+      )}
+
+      {/* Progress dots (image phase) */}
+      {cycling && (
+        <div className={cn("absolute inset-x-0 bottom-10 z-10 transition-opacity duration-[1400ms]", showingImage ? "opacity-100" : "pointer-events-none opacity-0")}>
+          <Container>
+            <div className="flex gap-2" role="tablist" aria-label="Hero images">
+              {slides.map((slide, i) => (
+                <button
+                  key={slide.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === phase}
+                  aria-label={`Show image ${i + 1}`}
+                  onClick={() => setPhase(i)}
+                  className={cn("h-1 w-10 transition-colors", i === phase ? "bg-brand-yellow" : "bg-white/40 hover:bg-white/70")}
+                />
+              ))}
+            </div>
+          </Container>
+        </div>
+      )}
 
       <motion.a
         href="#intro"

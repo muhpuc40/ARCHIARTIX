@@ -52,7 +52,7 @@ export function CartView() {
         <dl className="mt-6 space-y-3 text-sm">
           <div className="flex justify-between"><dt>Items</dt><dd>{cartCount(items)}</dd></div>
           <div className="flex justify-between"><dt>Subtotal</dt><dd className="font-semibold">{formatBDT(cartTotal(items))}</dd></div>
-          <div className="flex justify-between text-neutral-600"><dt>Delivery</dt><dd>Confirmed by our team</dd></div>
+          <div className="flex justify-between text-neutral-600"><dt>Delivery charge</dt><dd>Applicable · confirmed by phone</dd></div>
         </dl>
         <div className="mt-6 flex items-baseline justify-between border-t border-ink/15 pt-5">
           <span className="text-sm font-semibold uppercase tracking-[0.14em]">Total</span>
@@ -61,7 +61,7 @@ export function CartView() {
         <ButtonLink href="/checkout" size="lg" className="mt-6 w-full">
           Checkout <ArrowRight size={16} />
         </ButtonLink>
-        <p className="mt-4 text-center text-xs text-neutral-600">Pay on delivery · Sign in with Google to order</p>
+        <p className="mt-4 text-center text-xs text-neutral-600">bKash · Nagad · Cash on Delivery · Sign in to order</p>
       </aside>
     </div>
   );

@@ -36,6 +36,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
             price_bdt: p.price_bdt,
             stock: p.stock,
             images: p.images ?? [],
+            model_url: p.model_url ?? null,
             is_published: p.is_published,
           },
         }}

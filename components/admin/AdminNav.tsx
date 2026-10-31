@@ -1,7 +1,6 @@
 "use client";
 
-import { Calculator, FolderKanban, LayoutDashboard, LogOut, Mail, Menu, MessageSquareQuote, Package, ShoppingBag, Users, X } from "lucide-react";
-import Image from "next/image";
+import { Calculator, FolderKanban, Box, GalleryHorizontal, LayoutDashboard, LogOut, Mail, Menu, MessageSquareQuote, Package, ShoppingBag, Users, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +11,8 @@ const links = [
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
   { href: "/admin/projects", label: "Projects", icon: FolderKanban },
+  { href: "/admin/hero", label: "Hero images", icon: GalleryHorizontal },
+  { href: "/admin/site-media", label: "Landing 3D & video", icon: Box },
   { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
   { href: "/admin/estimates", label: "Estimates", icon: Calculator },
   { href: "/admin/customers", label: "Customers", icon: Users },
@@ -25,8 +26,8 @@ export function AdminNav({ name }: { name: string }) {
   return (
     <aside className="bg-charcoal-deep text-white lg:sticky lg:top-0 lg:h-dvh lg:w-64 lg:shrink-0">
       <div className="flex items-center justify-between px-5 py-4 lg:block lg:py-8">
-        <Link href="/admin/dashboard" className="relative block h-8 w-36">
-          <Image src="/brand/logo-dark.png" alt="ARCHIAETIX admin" fill sizes="144px" className="object-contain object-left" />
+        <Link href="/admin/dashboard" className="block font-serif text-2xl font-semibold tracking-[0.18em] text-white hover:text-brand-yellow">
+          ARCHIAETIX
         </Link>
         <button
           type="button"

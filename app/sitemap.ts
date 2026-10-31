@@ -17,6 +17,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ["/services", 0.9],
     ["/shop", 0.8],
     ["/contact", 0.8],
+    ["/privacy", 0.3],
+    ["/terms", 0.3],
+    ["/developer", 0.3],
   ];
   const categories = Array.from(new Set(projects.map((p) => p.category?.slug).filter(Boolean))) as string[];
 

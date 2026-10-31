@@ -37,14 +37,18 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
       </section>
 
       <section className="border-l-4 border-brand-yellow bg-white p-6 text-sm">
-        <h2 className="mb-3 font-sans text-sm font-bold uppercase tracking-[0.12em]">Payment to verify</h2>
+        <h2 className="mb-3 font-sans text-sm font-bold uppercase tracking-[0.12em]">{o.payment_method === "cod" ? "Cash on Delivery" : "Payment to verify"}</h2>
         <dl className="grid gap-x-8 gap-y-2 sm:grid-cols-4">
           <div><dt className="text-neutral-500">Method</dt><dd className="font-semibold">{PAYMENT_LABELS[o.payment_method]}</dd></div>
           <div><dt className="text-neutral-500">Paid from</dt><dd className="font-semibold">{o.payment_sender ?? "—"}</dd></div>
           <div><dt className="text-neutral-500">Transaction ID</dt><dd className="font-mono font-semibold">{o.payment_ref ?? "—"}</dd></div>
-          <div><dt className="text-neutral-500">Amount due</dt><dd className="font-semibold">{formatBDT(o.total_bdt)}</dd></div>
+          <div><dt className="text-neutral-500">{o.payment_method === "cod" ? "Collect on delivery" : "Amount due"}</dt><dd className="font-semibold">{formatBDT(o.total_bdt)}</dd></div>
         </dl>
-        <p className="mt-3 text-xs text-neutral-500">Check the TrxID and amount in your bKash/Nagad app, then press “Confirm order”.</p>
+        <p className="mt-3 text-xs text-neutral-500">
+          {o.payment_method === "cod"
+            ? "Call the customer to confirm, then press “Confirm order”. Collect the amount above plus the delivery charge when it arrives."
+            : "Check the TrxID and amount in your bKash/Nagad app, then press “Confirm order”."}
+        </p>
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">

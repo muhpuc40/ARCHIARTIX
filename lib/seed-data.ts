@@ -186,7 +186,7 @@ export const seedTestimonials: Testimonial[] = [
     location: "Gulshan, Dhaka",
     quote:
       "Clear budgets, weekly updates and a team that actually showed up every day. Our office opened on the date we were promised.",
-    rating: 5,
+    rating: 4.5,
     avatar_url: null,
     is_published: true,
     sort_order: 2,

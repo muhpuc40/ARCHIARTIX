@@ -2,7 +2,7 @@ import { guardApi } from "@/lib/api-auth";
 import { isCloudinaryConfigured, signUpload } from "@/lib/cloudinary";
 import { jsonError, jsonOk } from "@/lib/http";
 import { rateLimit } from "@/lib/rate-limit";
-import { IMAGE_MIME, uploadRequestSchema } from "@/lib/validators";
+import { IMAGE_MIME, MODEL_MIME, uploadRequestSchema } from "@/lib/validators";
 
 /**
  * POST — admin asks for a signed Cloudinary upload. The browser then uploads the
@@ -28,10 +28,12 @@ export async function POST(request: Request) {
   if (!parsed.success) return jsonError(422, parsed.error.issues[0]?.message ?? "Unsupported file.");
 
   const isImage = (IMAGE_MIME as readonly string[]).includes(parsed.data.contentType);
+  const isModel = (MODEL_MIME as readonly string[]).includes(parsed.data.contentType);
+  // 3D models (.glb) are stored as Cloudinary "raw" files.
   const signed = signUpload({
     folder: parsed.data.folder,
-    resourceType: isImage ? "image" : "video",
-    allowedFormats: isImage ? "jpg,jpeg,png,webp,avif" : "mp4,webm,mov",
+    resourceType: isModel ? "raw" : isImage ? "image" : "video",
+    allowedFormats: isModel ? undefined : isImage ? "jpg,jpeg,png,webp,avif" : "mp4,webm,mov",
   });
   return jsonOk(signed);
 }

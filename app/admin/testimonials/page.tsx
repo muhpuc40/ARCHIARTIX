@@ -1,7 +1,9 @@
-import { Pencil, Plus, Star } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { DeleteButton } from "@/components/admin/DeleteButton";
 import { ButtonLink } from "@/components/ui/Button";
+import { Stars } from "@/components/ui/Stars";
 import { requireAdmin } from "@/lib/auth";
 import type { Testimonial } from "@/lib/types";
 
@@ -27,10 +29,15 @@ export default async function AdminTestimonialsPage() {
         <ul className="space-y-4">
           {items.map((t) => (
             <li key={t.id} className="flex flex-wrap items-start justify-between gap-4 border border-line bg-white p-5">
+              {t.project_photo_url && (
+                <div className="relative h-24 w-36 shrink-0 overflow-hidden bg-neutral-100">
+                  <Image src={t.project_photo_url} alt={`Project photo for ${t.name}`} fill sizes="144px" className="object-cover" />
+                </div>
+              )}
               <div className="min-w-0 flex-1">
                 <p className="flex flex-wrap items-center gap-3 font-bold">
                   {t.name}
-                  <span className="flex text-brand-yellow-deep" aria-label={`${t.rating} stars`}>{Array.from({ length: t.rating }).map((_, i) => <Star key={i} size={13} fill="currentColor" />)}</span>
+                  <Stars value={t.rating} size={14} className="text-brand-yellow-deep" />
                   {!t.is_published && <span className="rounded-full border border-neutral-300 px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">Draft</span>}
                 </p>
                 <p className="text-xs text-neutral-500">{[t.role, t.location].filter(Boolean).join(" · ")}</p>

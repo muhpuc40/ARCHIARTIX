@@ -151,9 +151,44 @@ if (o2) {
   (row.m === "nagad" && row.s === "01812345678" && row.r === "ABC123DEF9") ? ok("payment fields saved (TrxID upper-cased)") : bad("payment fields", JSON.stringify(row));
 }
 await as("authenticated", C, () => expectFail("same TrxID cannot be reused", () => db.query("select create_order($1::jsonb,$2::jsonb,$3::jsonb)", [JSON.stringify([{ product_id: P1, quantity: 1 }]), JSON.stringify(ship), JSON.stringify({ method: "bkash", sender: "01712345678", trx_id: "ABC123DEF9" })]), "already been used"));
-await as("authenticated", C, () => expectFail("card / COD methods are rejected", () => db.query("select create_order($1::jsonb,$2::jsonb,$3::jsonb)", [JSON.stringify([{ product_id: P1, quantity: 1 }]), JSON.stringify(ship), JSON.stringify({ method: "card", sender: "01712345678", trx_id: "ZZZ999AAA1" })]), "transaction ID"));
+await as("authenticated", C, () => expectFail("card payments are rejected", () => db.query("select create_order($1::jsonb,$2::jsonb,$3::jsonb)", [JSON.stringify([{ product_id: P1, quantity: 1 }]), JSON.stringify(ship), JSON.stringify({ method: "card", sender: "01712345678", trx_id: "ZZZ999AAA1" })]), "Choose bKash"));
 await as("authenticated", C, () => expectFail("missing TrxID is rejected", () => db.query("select create_order($1::jsonb,$2::jsonb,$3::jsonb)", [JSON.stringify([{ product_id: P1, quantity: 1 }]), JSON.stringify(ship), JSON.stringify({ method: "bkash", sender: "01712345678", trx_id: "" })]), "transaction ID"));
 await as("authenticated", C, () => expectFail("invalid sender number is rejected", () => db.query("select create_order($1::jsonb,$2::jsonb,$3::jsonb)", [JSON.stringify([{ product_id: P1, quantity: 1 }]), JSON.stringify(ship), JSON.stringify({ method: "bkash", sender: "12345", trx_id: "QWE456RTY7" })]), "transaction ID"));
+
+console.log("\nCash on Delivery");
+const codOrder = (payment) => as("authenticated", C, async () =>
+  (await db.query("select create_order($1::jsonb,$2::jsonb,$3::jsonb) r", [JSON.stringify([{ product_id: P1, quantity: 1 }]), JSON.stringify(ship), JSON.stringify(payment)])).rows[0].r);
+const undo = (id) => db.exec(`delete from orders where id='${id}'; update products set stock = stock + 1 where id='${P1}'`); // keep later counts unchanged
+const cod1 = await codOrder({ method: "cod" }).then((r) => (ok("COD order needs no sender / TrxID"), r), (e) => (bad("COD order", e.message), null));
+if (cod1) {
+  const row = (await db.query(`select payment_method m, payment_sender s, payment_ref r from orders where id='${cod1.id}'`)).rows[0];
+  (row.m === "cod" && row.s === null && row.r === null) ? ok("COD row stores no sender / TrxID") : bad("COD row", JSON.stringify(row));
+  await undo(cod1.id);
+}
+const cod2 = await codOrder({ method: "cod", sender: "junk", trx_id: "junk" }).then((r) => (ok("COD ignores junk sender / TrxID"), r), (e) => (bad("COD with junk fields", e.message), null));
+if (cod2) {
+  const row = (await db.query(`select payment_sender s, payment_ref r from orders where id='${cod2.id}'`)).rows[0];
+  (row.s === null && row.r === null) ? ok("junk is not stored") : bad("junk stored", JSON.stringify(row));
+  await undo(cod2.id);
+}
+
+console.log("\nHero slides");
+await db.exec(`insert into hero_slides (image_url, is_published, sort_order) values ('https://res.cloudinary.com/x/a.jpg', true, 1), ('https://res.cloudinary.com/x/b.jpg', false, 2)`);
+const anonH = await as("anon", null, async () => (await db.query("select count(*) c from hero_slides")).rows[0].c);
+Number(anonH) === 1 ? ok("anon sees only published hero slides") : bad("anon hero slides", String(anonH));
+await as("anon", null, async () => { const r = await db.query("update hero_slides set caption='x' returning id"); r.rows.length === 0 ? ok("anon cannot edit hero slides") : bad("anon hero edit leaked"); });
+
+console.log("\nSite settings & product 3D models");
+await db.exec(`insert into site_settings (key, value) values ('tour3d_url', 'https://res.cloudinary.com/x/raw/upload/room.glb')`);
+(await as("anon", null, async () => (await db.query("select count(*) c from site_settings")).rows[0].c)) == 1 ? ok("anon can read site settings") : bad("anon site_settings read");
+await as("anon", null, () => expectFail("anon cannot write site settings", () => db.query("insert into site_settings (key, value) values ('video_url','x')")));
+await as("authenticated", B, () => expectFail("customer cannot write site settings", () => db.query("insert into site_settings (key, value) values ('video_url','x')")));
+await as("authenticated", A, async () => {
+  await expectOk("admin can save site settings", () => db.query("insert into site_settings (key, value) values ('video_url','https://youtu.be/abc') on conflict (key) do update set value = excluded.value"));
+  await expectFail("unknown setting keys are rejected", () => db.query("insert into site_settings (key, value) values ('secret','x')"));
+  await expectOk("admin can attach a .glb to a product", () => db.query(`update products set model_url='https://res.cloudinary.com/x/raw/upload/chair.glb' where id='${P1}'`));
+});
+(await as("anon", null, async () => (await db.query(`select model_url m from products where id='${P1}'`)).rows[0]?.m)) ? ok("shoppers can read the product's model_url") : bad("model_url not readable");
 
 console.log("\nTestimonials & estimates");
 await db.exec(`update testimonials set is_published=false where sort_order=3`);
@@ -164,6 +199,13 @@ await as("authenticated", B, async () => {
   await expectFail("customer cannot add testimonials", () => db.query("insert into testimonials (name, quote) values ('x','hello world long')"));
   (await count("select count(*) c from estimates")) === 0 ? ok("customer cannot read estimates") : bad("estimates leak");
   await expectFail("customer cannot insert estimates directly", () => db.query("insert into estimates (space_kind, flat_status, package, name, phone) values ('Home','ready_for_interior','standard','x','01712345678')"));
+});
+await as("authenticated", A, async () => {
+  await expectOk("admin can save half-star ratings (4.5) and a project photo", () => db.query("insert into testimonials (name, quote, rating, project_photo_url, is_published, sort_order) values ('Half','Lovely work all round.',4.5,'https://res.cloudinary.com/x/p.jpg',false,90)"));
+  await expectFail("rating 4.3 is rejected", () => db.query("insert into testimonials (name, quote, rating) values ('x','Lovely work all round.',4.3)"));
+  await expectFail("rating 0.5 is rejected", () => db.query("insert into testimonials (name, quote, rating) values ('x','Lovely work all round.',0.5)"));
+  await expectFail("rating 5.5 is rejected", () => db.query("insert into testimonials (name, quote, rating) values ('x','Lovely work all round.',5.5)"));
+  await db.query("delete from testimonials where sort_order = 90");
 });
 await db.exec(`insert into estimates (space_kind, flat_status, rooms, package, name, phone) values ('Residential','ready_for_interior','[{"name":"Bedroom","count":2}]'::jsonb,'superior','Rafi','01712345678')`);
 await as("authenticated", A, async () => {

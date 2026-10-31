@@ -22,7 +22,20 @@ export const siteConfig = {
   hours: "Sat – Thu · 10:00 AM – 7:00 PM",
   // Embeddable 3D / 360° tour (Sketchfab, Matterport, Kuula, a Cloudinary video page …)
   tour3dUrl: clean(process.env.NEXT_PUBLIC_3D_VIEW_URL),
-  mapsEmbedUrl: clean(process.env.NEXT_PUBLIC_MAPS_EMBED_URL),
+  // Walkthrough video (Cloudinary .mp4 URL or a YouTube link) — shown under the "Video" tab next to the 3D view
+  videoUrl: clean(process.env.NEXT_PUBLIC_VIDEO_URL) || clean(process.env.NEXT_PUBLIC_HERO_VIDEO_URL),
+  // Studio map. Defaults to Chattogram (no API key needed); paste a Google Maps "Embed a map" src to pin the exact studio.
+  mapsEmbedUrl:
+    clean(process.env.NEXT_PUBLIC_MAPS_EMBED_URL) || "https://www.google.com/maps?q=Chattogram%2C%20Bangladesh&z=12&output=embed",
+  mapsLink: clean(process.env.NEXT_PUBLIC_MAPS_LINK) || "https://www.google.com/maps/search/?api=1&query=Chattogram%2C%20Bangladesh",
+  developer: {
+    name: clean(process.env.NEXT_PUBLIC_DEVELOPER_NAME) || "Minhaj",
+    email: clean(process.env.NEXT_PUBLIC_DEVELOPER_EMAIL),
+    phone: clean(process.env.NEXT_PUBLIC_DEVELOPER_PHONE),
+    website: clean(process.env.NEXT_PUBLIC_DEVELOPER_WEBSITE),
+    github: clean(process.env.NEXT_PUBLIC_DEVELOPER_GITHUB),
+    linkedin: clean(process.env.NEXT_PUBLIC_DEVELOPER_LINKEDIN),
+  },
   social: {
     facebook: clean(process.env.NEXT_PUBLIC_FACEBOOK_URL),
     instagram: clean(process.env.NEXT_PUBLIC_INSTAGRAM_URL),

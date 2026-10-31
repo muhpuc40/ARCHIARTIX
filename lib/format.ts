@@ -43,4 +43,4 @@ export function formatOrderNo(no: number | string | null | undefined) {
   return `ARX-${no ?? "—"}`;
 }
 
-export const PAYMENT_LABELS = { bkash: "bKash", nagad: "Nagad", cod: "Cash on delivery" } as const;
+export const PAYMENT_LABELS = { bkash: "bKash", nagad: "Nagad", cod: "Cash on Delivery" } as const;

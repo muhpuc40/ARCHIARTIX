@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/montserrat";
 import "@fontsource-variable/playfair-display";
 import "./globals.css";
+import { CursorBall } from "@/components/ui/CursorBall";
 import { Providers } from "@/components/providers/Providers";
 import { siteConfig } from "@/lib/site";
 
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <Providers>{children}</Providers>
+        <CursorBall />
       </body>
     </html>
   );

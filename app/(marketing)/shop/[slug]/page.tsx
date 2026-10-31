@@ -68,7 +68,7 @@ export default async function ProductPage({ params }: Props) {
       />
       <section className="py-12 sm:py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          <ProductGallery images={product.images} name={product.name} slug={product.slug} />
+          <ProductGallery images={product.images} name={product.name} slug={product.slug} modelUrl={product.model_url} />
           <div>
             {product.category && (
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-500">{product.category.name}</p>
@@ -81,7 +81,7 @@ export default async function ProductPage({ params }: Props) {
             <ul className="mt-8 space-y-4 text-sm">
               {[
                 { Icon: Truck, text: "Delivery across all 64 districts — our team confirms charges and timing by phone." },
-                { Icon: Wallet, text: "Pay on delivery available. Prices include VAT where applicable." },
+                { Icon: Wallet, text: "Pay with bKash, Nagad or Cash on Delivery. Delivery charge applicable." },
                 { Icon: ShieldCheck, text: "Every piece is checked by our studio before it ships." },
               ].map(({ Icon, text }) => (
                 <li key={text} className="flex gap-4">

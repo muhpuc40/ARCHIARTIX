@@ -64,14 +64,15 @@ If you already ran the SQL files before, just run `supabase/schema.sql` and then
 
 ## 3. Cloudinary (images + video)
 All uploads in the admin panel (product photos, project photos, testimonial photos) go to Cloudinary. Add `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET` from your Cloudinary dashboard to `.env.local`. Uploads are signed on the server, so the secret never reaches the browser.
-For the hero video and the 3D view, upload the video to Cloudinary yourself and paste its URL into `NEXT_PUBLIC_HERO_VIDEO_URL` / `NEXT_PUBLIC_3D_VIEW_URL`.
+Hero images are managed in **Admin → Hero images** (stored in the database + Cloudinary; timings in `lib/hero-config.ts`). The landing-page 3D model (.glb) and video are uploaded in **Admin → Landing 3D & video** (stored on Cloudinary; the `NEXT_PUBLIC_3D_VIEW_URL` / `NEXT_PUBLIC_VIDEO_URL` env values are only a fallback). Product 3D models (.glb) are uploaded in the product form. Cloudinary’s free plan limits raw files such as .glb to roughly 10 MB — compress larger models (gltf-transform / gltf.report) or upgrade.
 
 ## 4. Your content
 
 | What | Where |
 |---|---|
 | Phone, email, address, WhatsApp number, social links | `.env.local` (see `.env.example`) |
-| Hero background video (optional) | `NEXT_PUBLIC_HERO_VIDEO_URL` (Cloudinary URL) |
+| Walkthrough video (optional, "Video" tab) | `NEXT_PUBLIC_VIDEO_URL` (Cloudinary mp4 or YouTube) |
+| Contact map / developer page | `NEXT_PUBLIC_MAPS_EMBED_URL`, `NEXT_PUBLIC_DEVELOPER_*` |
 | 3D view in “Walk through your space” | `NEXT_PUBLIC_3D_VIEW_URL` |
 | Logos | `public/brand/` |
 | Products, projects, testimonials (with photos) | Admin panel |

@@ -56,7 +56,7 @@ export default async function OrdersPage() {
                   ))}
                 </ul>
                 <p className="border-t border-line px-6 py-4 text-xs text-neutral-600">
-                  Deliver to: {o.shipping_address.name}, {o.shipping_address.address}, {o.shipping_address.city} · {o.shipping_address.phone} · Paid via {PAYMENT_LABELS[o.payment_method]}{o.payment_ref ? ` (TrxID ${o.payment_ref})` : ""}{o.status === "pending" ? " · payment being verified" : ""}
+                  Deliver to: {o.shipping_address.name}, {o.shipping_address.address}, {o.shipping_address.city} · {o.shipping_address.phone} · {o.payment_method === "cod" ? "Cash on Delivery" : `Paid via ${PAYMENT_LABELS[o.payment_method]}`}{o.payment_ref ? ` (TrxID ${o.payment_ref})` : ""}{o.status === "pending" ? (o.payment_method === "cod" ? " · awaiting confirmation" : " · payment being verified") : ""} · delivery charge applicable
                 </p>
               </article>
             ))

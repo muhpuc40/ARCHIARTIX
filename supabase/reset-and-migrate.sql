@@ -85,10 +85,13 @@ create table if not exists public.products (
   price_bdt     integer not null check (price_bdt >= 0),
   stock         integer not null default 0 check (stock >= 0),
   images        text[] not null default '{}',
+  model_url     text,
   is_published  boolean not null default false,
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
 );
+
+alter table public.products add column if not exists model_url text;
 
 create table if not exists public.orders (
   id                uuid primary key default gen_random_uuid(),
@@ -126,7 +129,7 @@ create table if not exists public.inquiries (
 
 -- Payments are manual mobile-money transfers (bKash / Nagad send-money).
 -- The customer pays, then enters the sender number and transaction ID at checkout;
--- an admin verifies it and confirms the order. 'cod' is kept only for legacy rows.
+-- an admin verifies it and confirms the order. 'cod' = Cash on Delivery (nothing to verify up front).
 alter table public.orders add column if not exists payment_sender text;
 alter table public.orders add column if not exists payment_ref    text;
 alter table public.orders alter column payment_method set default 'bkash';
@@ -137,13 +140,39 @@ create unique index if not exists orders_payment_ref_uidx
   on public.orders (upper(payment_ref)) where payment_ref is not null and status <> 'cancelled';
 
 create table if not exists public.testimonials (
+  id                 uuid primary key default gen_random_uuid(),
+  name               text not null,
+  role               text,
+  location           text,
+  quote              text not null,
+  -- 1, 1.5, 2 … 5 (half-star steps)
+  rating             numeric(2,1) not null default 5 check (rating between 1 and 5 and rating * 2 = round(rating * 2)),
+  avatar_url         text,
+  project_photo_url  text,
+  is_published       boolean not null default true,
+  sort_order         integer not null default 0,
+  created_at         timestamptz not null default now()
+);
+
+-- Upgrade path for databases created before half-star ratings / project photos.
+alter table public.testimonials add column if not exists project_photo_url text;
+alter table public.testimonials alter column rating type numeric(2,1) using rating::numeric;
+alter table public.testimonials drop constraint if exists testimonials_rating_check;
+alter table public.testimonials add constraint testimonials_rating_check
+  check (rating between 1 and 5 and rating * 2 = round(rating * 2));
+
+-- Editable site-wide settings (landing-page 3D model / video …). One row per key.
+create table if not exists public.site_settings (
+  key         text primary key check (key in ('tour3d_url', 'video_url')),
+  value       text not null,
+  updated_at  timestamptz not null default now()
+);
+
+-- Home-page hero slideshow images (files live on Cloudinary, URLs live here).
+create table if not exists public.hero_slides (
   id            uuid primary key default gen_random_uuid(),
-  name          text not null,
-  role          text,
-  location      text,
-  quote         text not null,
-  rating        integer not null default 5 check (rating between 1 and 5),
-  avatar_url    text,
+  image_url     text not null,
+  caption       text,
   is_published  boolean not null default true,
   sort_order    integer not null default 0,
   created_at    timestamptz not null default now()
@@ -167,6 +196,7 @@ create table if not exists public.estimates (
 );
 
 create index if not exists testimonials_order_idx on public.testimonials (is_published, sort_order);
+create index if not exists hero_slides_order_idx  on public.hero_slides (is_published, sort_order);
 create index if not exists estimates_status_idx   on public.estimates (status, created_at desc);
 
 create index if not exists products_published_idx   on public.products (is_published, category_id);
@@ -410,14 +440,21 @@ begin
   p_sender := regexp_replace(coalesce(payment ->> 'sender', ''), '[\s-]', '', 'g');
   p_ref    := upper(btrim(coalesce(payment ->> 'trx_id', '')));
 
-  if p_method not in ('bkash', 'nagad')
-     or p_sender !~ '^(\+?88)?01[3-9][0-9]{8}$'
-     or p_ref !~ '^[A-Z0-9]{6,20}$' then
-    raise exception 'ARX|PAYMENT|Enter the bKash/Nagad number you paid from and the transaction ID.' using errcode = '22023';
+  if p_method not in ('bkash', 'nagad', 'cod') then
+    raise exception 'ARX|PAYMENT|Choose bKash, Nagad or Cash on Delivery.' using errcode = '22023';
   end if;
 
-  if exists (select 1 from public.orders o where upper(o.payment_ref) = p_ref and o.status <> 'cancelled') then
-    raise exception 'ARX|TRX_USED|That transaction ID has already been used on another order.' using errcode = '22023';
+  if p_method = 'cod' then
+    -- pay the courier on delivery: nothing to verify up front
+    p_sender := null;
+    p_ref    := null;
+  else
+    if p_sender !~ '^(\+?88)?01[3-9][0-9]{8}$' or p_ref !~ '^[A-Z0-9]{6,20}$' then
+      raise exception 'ARX|PAYMENT|Enter the bKash/Nagad number you paid from and the transaction ID.' using errcode = '22023';
+    end if;
+    if exists (select 1 from public.orders o where upper(o.payment_ref) = p_ref and o.status <> 'cancelled') then
+      raise exception 'ARX|TRX_USED|That transaction ID has already been used on another order.' using errcode = '22023';
+    end if;
   end if;
 
   -- merge duplicate lines
@@ -571,6 +608,8 @@ alter table public.orders      enable row level security;
 alter table public.order_items enable row level security;
 alter table public.inquiries   enable row level security;
 alter table public.testimonials enable row level security;
+alter table public.hero_slides enable row level security;
+alter table public.site_settings enable row level security;
 alter table public.estimates   enable row level security;
 
 -- ---------------------------------------------------------------- profiles
@@ -650,6 +689,22 @@ drop policy if exists "testimonials: admin write"    on public.testimonials;
 create policy "testimonials: read published" on public.testimonials
   for select using (is_published = true or public.is_admin());
 create policy "testimonials: admin write" on public.testimonials
+  for all using (public.is_admin()) with check (public.is_admin());
+
+-- -------------------------------------------------------------- hero_slides
+drop policy if exists "hero_slides: read published" on public.hero_slides;
+drop policy if exists "hero_slides: admin write"    on public.hero_slides;
+create policy "hero_slides: read published" on public.hero_slides
+  for select using (is_published = true or public.is_admin());
+create policy "hero_slides: admin write" on public.hero_slides
+  for all using (public.is_admin()) with check (public.is_admin());
+
+-- ----------------------------------------------------------- site_settings
+drop policy if exists "site_settings: public read" on public.site_settings;
+drop policy if exists "site_settings: admin write" on public.site_settings;
+create policy "site_settings: public read" on public.site_settings
+  for select using (true);
+create policy "site_settings: admin write" on public.site_settings
   for all using (public.is_admin()) with check (public.is_admin());
 
 -- --------------------------------------------------------------- estimates
@@ -744,9 +799,10 @@ on conflict (id) do nothing;
 
 insert into public.testimonials (id, name, role, location, quote, rating, avatar_url, is_published, sort_order) values
   ('0d0d0d0d-0000-4000-8000-000000000001', 'Apartment owner', 'Homeowner', 'Dhanmondi, Dhaka', 'They turned a cramped flat into a calm, bright home. The 3D walkthrough meant there were no surprises on site — what we approved is exactly what we got.', 5, null, true, 1),
-  ('0d0d0d0d-0000-4000-8000-000000000002', 'Agency founder', 'Office fit-out', 'Gulshan, Dhaka', 'Clear budgets, weekly updates and a team that actually showed up every day. Our office opened on the date we were promised.', 5, null, true, 2),
+  ('0d0d0d0d-0000-4000-8000-000000000002', 'Agency founder', 'Office fit-out', 'Gulshan, Dhaka', 'Clear budgets, weekly updates and a team that actually showed up every day. Our office opened on the date we were promised.', 4.5, null, true, 2),
   ('0d0d0d0d-0000-4000-8000-000000000003', 'Villa owner', 'Residential', 'Khulshi, Chattogram', 'They understood how the building should breathe in our climate. The courtyard changed how the whole family lives.', 5, null, true, 3)
 on conflict (id) do nothing;
+
 
 -- Re-create profile rows for existing auth users (trigger only fires on new sign-ups)
 insert into public.profiles (id, full_name) select id, coalesce(raw_user_meta_data->>'full_name', split_part(email,'@',1)) from auth.users on conflict (id) do nothing;

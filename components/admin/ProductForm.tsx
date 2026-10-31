@@ -41,6 +41,7 @@ export function ProductForm({
       price_bdt: 0,
       stock: 0,
       images: [],
+      model_url: null,
       is_published: false,
     },
   });
@@ -86,6 +87,18 @@ export function ProductForm({
             render={({ field }) => <MediaUploader folder="products" value={field.value ?? []} onChange={field.onChange} />}
           />
           {errors.images && <p role="alert" className="mt-1 text-xs font-medium text-red-700">{errors.images.message ?? "Check the images."}</p>}
+        </div>
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-700">3D model (optional)</p>
+          <p className="mb-2 text-xs text-neutral-500">Upload a .glb file — shoppers can rotate and zoom it on the product page.</p>
+          <Controller
+            control={control}
+            name="model_url"
+            render={({ field }) => (
+              <MediaUploader folder="models" kind="model" max={1} value={field.value ? [field.value] : []} onChange={(urls) => field.onChange(urls[0] ?? null)} />
+            )}
+          />
+          {errors.model_url && <p role="alert" className="mt-1 text-xs font-medium text-red-700">{errors.model_url.message ?? "Check the 3D model."}</p>}
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { getPublicClient } from "@/lib/supabase/public";
 import { seedCategories, seedProducts, seedProjects, seedServices, seedTestimonials } from "@/lib/seed-data";
-import type { Category, Product, Project, Service, Testimonial } from "@/lib/types";
+import type { Category, HeroSlide, Product, Project, Service, Testimonial } from "@/lib/types";
 
 /**
  * Public data access. Reads go through the cookie-less anon client (so pages
@@ -110,6 +110,45 @@ export const getTestimonials = cache(async (): Promise<Testimonial[]> => {
     warn("testimonials", error);
   }
   return seedTestimonials;
+});
+
+/* ------------------------------- hero slides ------------------------------ */
+/** Admin-uploaded hero images. Empty list ⇒ the hero stays on its animated view. */
+export const getHeroSlides = cache(async (): Promise<HeroSlide[]> => {
+  const db = getPublicClient();
+  if (!db) return [];
+  const { data, error } = await db
+    .from("hero_slides")
+    .select("*")
+    .eq("is_published", true)
+    .order("sort_order")
+    .order("created_at", { ascending: false })
+    .limit(10);
+  if (error) {
+    warn("hero_slides", error);
+    return [];
+  }
+  return (data ?? []) as HeroSlide[];
+});
+
+/* ------------------------------ site settings ------------------------------ */
+export type SiteSettings = { tour3d_url: string; video_url: string };
+
+/** Landing-page 3D model / video set in Admin → Landing 3D & video. Empty string = not set (fall back to .env). */
+export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
+  const out: SiteSettings = { tour3d_url: "", video_url: "" };
+  const db = getPublicClient();
+  if (!db) return out;
+  const { data, error } = await db.from("site_settings").select("key, value");
+  if (error) {
+    warn("site_settings", error);
+    return out;
+  }
+  for (const row of data ?? []) {
+    if (row.key === "tour3d_url") out.tour3d_url = String(row.value ?? "");
+    else if (row.key === "video_url") out.video_url = String(row.value ?? "");
+  }
+  return out;
 });
 
 /* -------------------------------- products -------------------------------- */

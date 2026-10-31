@@ -16,7 +16,7 @@ export default async function EditTestimonialPage({ params }: { params: Promise<
       <h1 className="font-serif text-4xl">Edit testimonial</h1>
       <TestimonialForm
         id={t.id}
-        defaults={{ name: t.name, role: t.role ?? "", location: t.location ?? "", quote: t.quote, rating: t.rating, avatar_url: t.avatar_url, is_published: t.is_published, sort_order: t.sort_order }}
+        defaults={{ name: t.name, role: t.role ?? "", location: t.location ?? "", quote: t.quote, rating: t.rating, avatar_url: t.avatar_url, project_photo_url: t.project_photo_url ?? null, is_published: t.is_published, sort_order: t.sort_order }}
       />
     </div>
   );

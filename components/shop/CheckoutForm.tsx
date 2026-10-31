@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, CircleCheck, Copy, Loader2, Lock } from "lucide-react";
+import { Check, CircleCheck, Copy, Loader2, Lock, Truck } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,16 +14,17 @@ import { cart, cartTotal, useCartItems } from "@/lib/cart";
 import { formatBDT, formatOrderNo } from "@/lib/format";
 import { siteConfig, whatsappLink } from "@/lib/site";
 import { cn } from "@/lib/utils";
-import { BD_DISTRICTS, paymentSchema, shippingSchema } from "@/lib/validators";
+import { BD_DISTRICTS, checkPaymentFields, paymentFields, shippingSchema } from "@/lib/validators";
 import { z } from "zod";
 
-const checkoutSchema = shippingSchema.extend(paymentSchema.shape);
+const checkoutSchema = shippingSchema.extend(paymentFields).superRefine(checkPaymentFields);
 type FormValues = z.input<typeof checkoutSchema>;
 type Output = z.output<typeof checkoutSchema>;
 
 const METHODS = [
-  { id: "bkash", label: "bKash", color: "#E2136E", number: siteConfig.payments.bkash },
-  { id: "nagad", label: "Nagad", color: "#F6921E", number: siteConfig.payments.nagad },
+  { id: "bkash", label: "BKASH", name: "bKash", color: "#E2136E", number: siteConfig.payments.bkash },
+  { id: "nagad", label: "NAGAD", name: "Nagad", color: "#F6921E", number: siteConfig.payments.nagad },
+  { id: "cod", label: "CASH ON DELIVERY", name: "Cash on Delivery", color: "#1B1B1B", number: "" },
 ] as const;
 
 function CopyNumber({ number }: { number: string }) {
@@ -56,7 +57,7 @@ export function CheckoutForm({
   const items = useCartItems();
   const toast = useToast();
   const router = useRouter();
-  const [placed, setPlaced] = useState<{ order_no: number; total_bdt: number } | null>(null);
+  const [placed, setPlaced] = useState<{ order_no: number; total_bdt: number; method: string } | null>(null);
 
   const {
     register,
@@ -78,7 +79,7 @@ export function CheckoutForm({
         body: JSON.stringify({
           items: items.map((l) => ({ product_id: l.productId, quantity: l.qty })),
           shipping,
-          payment: { method, sender, trx_id },
+          payment: method === "cod" ? { method, sender: "", trx_id: "" } : { method, sender, trx_id },
         }),
       });
       const json = await res.json().catch(() => ({}));
@@ -87,7 +88,7 @@ export function CheckoutForm({
         throw new Error(json.error ?? "We couldn't place your order.");
       }
       cart.clear();
-      setPlaced(json.order);
+      setPlaced({ ...json.order, method });
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (e) {
       toast({ title: "Order not placed", description: (e as Error).message, tone: "error" });
@@ -102,7 +103,12 @@ export function CheckoutForm({
         <p className="mt-3 text-lg">
           Your order number is <strong>{formatOrderNo(placed.order_no)}</strong> · {formatBDT(placed.total_bdt)}
         </p>
-        <p className="mt-3 text-neutral-600">Thank you! We’ll verify your payment and call you shortly to confirm delivery. You can track the status in your orders.</p>
+        <p className="mt-3 text-neutral-600">
+          {placed.method === "cod"
+            ? "Thank you! We’ll call you shortly to confirm delivery. Please keep the cash ready — the delivery charge is added on delivery."
+            : "Thank you! We’ll verify your payment and call you shortly to confirm delivery. The delivery charge is confirmed on that call."}{" "}
+          You can track the status in your orders.
+        </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <ButtonLink href="/account/orders">View my orders</ButtonLink>
           <ButtonLink href="/shop" variant="outline">Keep shopping</ButtonLink>
@@ -152,50 +158,67 @@ export function CheckoutForm({
 
           <fieldset className="space-y-5">
             <legend className="mb-2 font-serif text-2xl">Payment</legend>
-            <p className="text-sm text-neutral-600">Pay by mobile money, then enter the transaction ID so we can verify it.</p>
-            <div className="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-label="Payment method">
+            <div className="grid gap-3 sm:grid-cols-3" role="radiogroup" aria-label="Payment method">
               {METHODS.map((m) => (
                 <label
                   key={m.id}
                   className={cn(
-                    "flex cursor-pointer items-center gap-4 border-2 p-4 transition-colors",
+                    "flex cursor-pointer items-center gap-3 border-2 p-4 transition-colors",
                     method === m.id ? "border-ink bg-brand-cream" : "border-line hover:border-neutral-400",
                   )}
                 >
                   <input type="radio" value={m.id} className="sr-only" {...register("method")} />
-                  <span className="grid h-11 w-11 place-items-center rounded-md text-sm font-bold text-white" style={{ background: m.color }} aria-hidden>
-                    {m.label[0]}
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md text-sm font-bold text-white" style={{ background: m.color }} aria-hidden>
+                    {m.id === "cod" ? "৳" : m.label[0]}
                   </span>
-                  <span className="font-semibold">{m.label}</span>
-                  {method === m.id && <CircleCheck size={20} className="ml-auto" aria-hidden />}
+                  <span className="text-sm font-bold leading-tight tracking-wide">{m.label}</span>
+                  {method === m.id && <CircleCheck size={18} className="ml-auto shrink-0" aria-hidden />}
                 </label>
               ))}
             </div>
             {errors.method && <p role="alert" className="text-xs font-medium text-red-700">{errors.method.message}</p>}
 
-            <div className="space-y-3 border-l-4 bg-neutral-50 p-5 text-sm" style={{ borderColor: selected.color }}>
-              <p className="font-semibold">How to pay with {selected.label}</p>
-              <ol className="list-decimal space-y-1 pl-5 text-neutral-700">
-                <li>Open the {selected.label} app and choose <strong>Send Money</strong>.</li>
-                <li>
-                  Send <strong>{formatBDT(cartTotal(items))}</strong> to this personal number:
-                  <span className="mt-2 flex flex-wrap items-center gap-3">
-                    <strong className="font-mono text-lg tracking-wide">{selected.number}</strong>
-                    <CopyNumber number={selected.number} />
-                  </span>
-                </li>
-                <li>Copy the <strong>Transaction ID (TrxID)</strong> from the confirmation SMS and enter it below.</li>
-              </ol>
-            </div>
+            <p className="flex items-start gap-2 bg-brand-yellow/25 px-4 py-3 text-sm font-medium">
+              <Truck size={18} className="mt-0.5 shrink-0" aria-hidden />
+              <span>
+                <strong>Delivery charge applicable.</strong> It depends on your district and is not included in the total above — we confirm the exact amount by phone before dispatch.
+              </span>
+            </p>
 
-            <div className="grid gap-6 sm:grid-cols-2">
-              <Field label={`${selected.label} number you paid from`} htmlFor="co-sender" error={errors.sender?.message} required hint="The account that sent the money">
-                <Input id="co-sender" type="tel" inputMode="tel" placeholder="01XXXXXXXXX" aria-invalid={!!errors.sender} {...register("sender")} />
-              </Field>
-              <Field label="Transaction ID (TrxID)" htmlFor="co-trx" error={errors.trx_id?.message} required hint="e.g. 8N7A6D5EE1">
-                <Input id="co-trx" autoCapitalize="characters" autoComplete="off" className="uppercase" aria-invalid={!!errors.trx_id} {...register("trx_id")} />
-              </Field>
-            </div>
+            {method === "cod" ? (
+              <div className="space-y-2 border-l-4 border-ink bg-neutral-50 p-5 text-sm text-neutral-700">
+                <p className="font-semibold text-ink">Cash on Delivery</p>
+                <p>
+                  Pay <strong>{formatBDT(cartTotal(items))}</strong> plus the delivery charge in cash when your order arrives. Nothing to pay now — we’ll call to confirm your order first.
+                </p>
+              </div>
+            ) : (
+              <>
+                <div className="space-y-3 border-l-4 bg-neutral-50 p-5 text-sm" style={{ borderColor: selected.color }}>
+                  <p className="font-semibold">How to pay with {selected.name}</p>
+                  <ol className="list-decimal space-y-1 pl-5 text-neutral-700">
+                    <li>Open the {selected.name} app and choose <strong>Send Money</strong>.</li>
+                    <li>
+                      Send <strong>{formatBDT(cartTotal(items))}</strong> to this personal number:
+                      <span className="mt-2 flex flex-wrap items-center gap-3">
+                        <strong className="font-mono text-lg tracking-wide">{selected.number}</strong>
+                        <CopyNumber number={selected.number} />
+                      </span>
+                    </li>
+                    <li>Copy the <strong>Transaction ID (TrxID)</strong> from the confirmation SMS and enter it below.</li>
+                  </ol>
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <Field label={`${selected.name} number you paid from`} htmlFor="co-sender" error={errors.sender?.message} required hint="The account that sent the money">
+                    <Input id="co-sender" type="tel" inputMode="tel" placeholder="01XXXXXXXXX" aria-invalid={!!errors.sender} {...register("sender")} />
+                  </Field>
+                  <Field label="Transaction ID (TrxID)" htmlFor="co-trx" error={errors.trx_id?.message} required hint="e.g. 8N7A6D5EE1">
+                    <Input id="co-trx" autoCapitalize="characters" autoComplete="off" className="uppercase" aria-invalid={!!errors.trx_id} {...register("trx_id")} />
+                  </Field>
+                </div>
+              </>
+            )}
           </fieldset>
 
           <Button type="submit" size="lg" disabled={isSubmitting} className="w-full">
@@ -227,7 +250,7 @@ export function CheckoutForm({
           <span className="text-sm font-semibold uppercase tracking-[0.14em]">Total</span>
           <span className="font-serif text-3xl font-bold">{formatBDT(cartTotal(items))}</span>
         </div>
-        <p className="mt-3 text-xs text-neutral-600">Delivery charge (if any) is confirmed by phone before dispatch. <Link href="/cart" className="underline">Edit cart</Link></p>
+        <p className="mt-3 text-xs text-neutral-600"><strong>Delivery charge applicable</strong> — confirmed by phone before dispatch. <Link href="/cart" className="underline">Edit cart</Link></p>
       </aside>
     </div>
   );

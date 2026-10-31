@@ -72,23 +72,16 @@ export default async function ContactPage({ searchParams }: Props) {
             </Reveal>
 
             <Reveal delay={0.15}>
-              {siteConfig.mapsEmbedUrl ? (
-                <iframe
-                  title="ARCHIAETIX studio location"
-                  src={siteConfig.mapsEmbedUrl}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="h-64 w-full border-0"
-                />
-              ) : (
-                <div className="blueprint-bg relative grid h-64 place-items-center overflow-hidden bg-ink text-center text-white">
-                  <div>
-                    <MapPin size={34} className="mx-auto text-brand-yellow" />
-                    <p className="mt-3 font-serif text-xl">Dhaka · Chattogram</p>
-                    <p className="text-sm text-white/60">Serving clients across Bangladesh</p>
-                  </div>
-                </div>
-              )}
+              <iframe
+                title="ARCHIAETIX — Chattogram map"
+                src={siteConfig.mapsEmbedUrl}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-72 w-full border border-line"
+              />
+              <a href={siteConfig.mapsLink} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-2 text-sm font-semibold hover:underline">
+                <MapPin size={16} /> Open in Google Maps
+              </a>
             </Reveal>
           </div>
 

@@ -46,6 +46,7 @@ export type Product = {
   price_bdt: number;
   stock: number;
   images: string[];
+  model_url?: string | null;
   is_published: boolean;
   created_at?: string;
 };
@@ -109,6 +110,15 @@ export type Testimonial = {
   quote: string;
   rating: number;
   avatar_url: string | null;
+  project_photo_url?: string | null;
+  is_published: boolean;
+  sort_order: number;
+};
+
+export type HeroSlide = {
+  id: string;
+  image_url: string;
+  caption: string | null;
   is_published: boolean;
   sort_order: number;
 };

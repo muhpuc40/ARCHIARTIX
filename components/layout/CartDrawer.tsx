@@ -78,7 +78,7 @@ export function CartDrawer() {
               <span className="text-sm font-semibold uppercase tracking-[0.14em]">Subtotal</span>
               <span className="font-serif text-2xl font-bold">{formatBDT(cartTotal(items))}</span>
             </div>
-            <p className="text-xs text-neutral-600">Delivery is confirmed by our team after you order. Pay on delivery available.</p>
+            <p className="text-xs text-neutral-600">Delivery charge applicable — confirmed by our team. Pay with bKash, Nagad or Cash on Delivery.</p>
             <div className="grid grid-cols-2 gap-3">
               <ButtonLink href="/cart" variant="outline" onClick={closeCart}>
                 View cart

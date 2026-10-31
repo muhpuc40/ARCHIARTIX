@@ -27,6 +27,12 @@ const services = [
   { label: "Get a Quote", href: "/contact?type=quote#quote" },
 ];
 
+const legal = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Service", href: "/terms" },
+  { label: "Developer", href: "/developer" },
+];
+
 export function Footer() {
   const activeSocials = socials.filter((s) => siteConfig.social[s.key]);
   return (
@@ -93,11 +99,17 @@ export function Footer() {
       </Container>
 
       <div className="border-t border-white/10">
-        <Container className="flex flex-col items-center justify-between gap-2 py-6 text-xs text-white/50 sm:flex-row">
+        <Container className="flex flex-col items-center justify-between gap-2 py-6 text-xs text-white/60 sm:flex-row">
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
-          <p className="tracking-[0.2em] uppercase">{siteConfig.tagline} · All prices in BDT (৳)</p>
+          <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            {legal.map((l) => (
+              <Link key={l.href} href={l.href} className="transition-colors hover:text-brand-yellow">
+                {l.label}
+              </Link>
+            ))}
+          </nav>
         </Container>
       </div>
     </footer>

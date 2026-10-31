@@ -11,10 +11,10 @@ export const isCloudinaryConfigured = Boolean(cloudName && apiKey && apiSecret);
  * Builds the signed parameters the browser needs to upload straight to Cloudinary.
  * The API secret never leaves the server; the signature only covers these exact params.
  */
-export function signUpload(opts: { folder: string; resourceType: "image" | "video"; allowedFormats: string }) {
+export function signUpload(opts: { folder: string; resourceType: "image" | "video" | "raw"; allowedFormats?: string }) {
   const timestamp = Math.floor(Date.now() / 1000);
   const params: Record<string, string | number> = {
-    allowed_formats: opts.allowedFormats,
+    ...(opts.allowedFormats ? { allowed_formats: opts.allowedFormats } : {}),
     folder: `archiaetix/${opts.folder}`,
     timestamp,
   };

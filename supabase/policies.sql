@@ -13,6 +13,8 @@ alter table public.orders      enable row level security;
 alter table public.order_items enable row level security;
 alter table public.inquiries   enable row level security;
 alter table public.testimonials enable row level security;
+alter table public.hero_slides enable row level security;
+alter table public.site_settings enable row level security;
 alter table public.estimates   enable row level security;
 
 -- ---------------------------------------------------------------- profiles
@@ -92,6 +94,22 @@ drop policy if exists "testimonials: admin write"    on public.testimonials;
 create policy "testimonials: read published" on public.testimonials
   for select using (is_published = true or public.is_admin());
 create policy "testimonials: admin write" on public.testimonials
+  for all using (public.is_admin()) with check (public.is_admin());
+
+-- -------------------------------------------------------------- hero_slides
+drop policy if exists "hero_slides: read published" on public.hero_slides;
+drop policy if exists "hero_slides: admin write"    on public.hero_slides;
+create policy "hero_slides: read published" on public.hero_slides
+  for select using (is_published = true or public.is_admin());
+create policy "hero_slides: admin write" on public.hero_slides
+  for all using (public.is_admin()) with check (public.is_admin());
+
+-- ----------------------------------------------------------- site_settings
+drop policy if exists "site_settings: public read" on public.site_settings;
+drop policy if exists "site_settings: admin write" on public.site_settings;
+create policy "site_settings: public read" on public.site_settings
+  for select using (true);
+create policy "site_settings: admin write" on public.site_settings
   for all using (public.is_admin()) with check (public.is_admin());
 
 -- --------------------------------------------------------------- estimates

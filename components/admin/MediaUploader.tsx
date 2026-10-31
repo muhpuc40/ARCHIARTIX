@@ -1,16 +1,17 @@
 "use client";
 
-import { ImagePlus, Loader2, Video, X } from "lucide-react";
+import { Box, ImagePlus, Loader2, Video, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useToast } from "@/components/ui/Toast";
-import { IMAGE_MIME, MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, VIDEO_MIME } from "@/lib/validators";
+import { IMAGE_MIME, MAX_IMAGE_BYTES, MAX_MODEL_BYTES, MAX_VIDEO_BYTES, MODEL_MIME, VIDEO_MIME } from "@/lib/validators";
 
-type Folder = "products" | "projects" | "testimonials" | "site";
+type Folder = "products" | "projects" | "testimonials" | "hero" | "models" | "site";
 
 /**
  * Uploads to Cloudinary using a one-time signature from /api/upload (admin only).
- * `kind="image"` shows a thumbnail grid (first = cover); `kind="video"` accepts video files.
+ * `kind="image"` shows a thumbnail grid (first = cover); `kind="video"` accepts video files;
+ * `kind="model"` accepts a 3D model (.glb).
  */
 export function MediaUploader({
   folder,
@@ -23,17 +24,23 @@ export function MediaUploader({
   value: string[];
   onChange: (urls: string[]) => void;
   max?: number;
-  kind?: "image" | "video";
+  kind?: "image" | "video" | "model";
 }) {
   const toast = useToast();
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
-  const accept: readonly string[] = kind === "video" ? VIDEO_MIME : IMAGE_MIME;
-  const maxBytes = kind === "video" ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES;
+  const accept: readonly string[] = kind === "video" ? VIDEO_MIME : kind === "model" ? MODEL_MIME : IMAGE_MIME;
+  const maxBytes = kind === "video" ? MAX_VIDEO_BYTES : kind === "model" ? MAX_MODEL_BYTES : MAX_IMAGE_BYTES;
+  const hint =
+    kind === "video" ? "MP4, WebM or MOV · up to 100 MB"
+    : kind === "model" ? `GLB 3D model · up to ${Math.round(MAX_MODEL_BYTES / 1024 / 1024)} MB`
+    : "JPG, PNG, WebP or AVIF · up to 8 MB each";
 
   async function uploadOne(file: File): Promise<string | null> {
-    if (!accept.includes(file.type)) {
-      toast({ title: "Unsupported file", description: `${file.name}: ${kind === "video" ? "use MP4, WebM or MOV" : "use JPG, PNG, WebP or AVIF"}.`, tone: "error" });
+    // Browsers rarely know the .glb type, so go by the file extension for models.
+    const contentType = kind === "model" ? (/\.glb$/i.test(file.name) ? MODEL_MIME[0] : "") : file.type;
+    if (!accept.includes(contentType)) {
+      toast({ title: "Unsupported file", description: `${file.name}: ${kind === "video" ? "use MP4, WebM or MOV" : kind === "model" ? "use a .glb file" : "use JPG, PNG, WebP or AVIF"}.`, tone: "error" });
       return null;
     }
     if (file.size > maxBytes) {
@@ -43,7 +50,7 @@ export function MediaUploader({
     const sig = await fetch("/api/upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ folder, contentType: file.type, size: file.size }),
+      body: JSON.stringify({ folder, contentType, size: file.size }),
     });
     const json = await sig.json().catch(() => ({}));
     if (!sig.ok) {
@@ -85,7 +92,14 @@ export function MediaUploader({
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {value.map((url, i) => (
           <li key={url} className="group relative aspect-square overflow-hidden border border-line bg-neutral-100">
-            {kind === "video" ? (
+            {kind === "model" ? (
+              <span className="grid h-full w-full place-items-center bg-ink p-2 text-center text-white">
+                <span>
+                  <Box size={26} className="mx-auto text-brand-yellow" />
+                  <span className="mt-1 block break-all text-[10px] leading-tight text-white/70">{decodeURIComponent(url.split("/").pop() ?? "model.glb")}</span>
+                </span>
+              </span>
+            ) : kind === "video" ? (
               <video src={url} muted playsInline preload="metadata" className="h-full w-full object-cover" />
             ) : (
               <Image src={url} alt={`Image ${i + 1}`} fill sizes="160px" className="object-cover" />
@@ -118,15 +132,15 @@ export function MediaUploader({
               disabled={busy}
               className="flex aspect-square w-full flex-col items-center justify-center gap-2 border-2 border-dashed border-neutral-300 text-xs font-semibold text-neutral-500 transition-colors hover:border-ink hover:text-ink disabled:opacity-60"
             >
-              {busy ? <Loader2 size={22} className="animate-spin" /> : kind === "video" ? <Video size={22} /> : <ImagePlus size={22} />}
-              {busy ? "Uploading…" : kind === "video" ? "Add video" : "Add images"}
+              {busy ? <Loader2 size={22} className="animate-spin" /> : kind === "video" ? <Video size={22} /> : kind === "model" ? <Box size={22} /> : <ImagePlus size={22} />}
+              {busy ? "Uploading…" : kind === "video" ? "Add video" : kind === "model" ? "Add .glb" : "Add images"}
             </button>
           </li>
         )}
       </ul>
-      <input ref={input} type="file" accept={accept.join(",")} multiple={max > 1} hidden onChange={(e) => onFiles(e.target.files)} />
+      <input ref={input} type="file" accept={kind === "model" ? ".glb,model/gltf-binary" : accept.join(",")} multiple={max > 1} hidden onChange={(e) => onFiles(e.target.files)} />
       <p className="text-xs text-neutral-500">
-        {kind === "video" ? "MP4, WebM or MOV · up to 100 MB" : "JPG, PNG, WebP or AVIF · up to 8 MB each"} · stored on Cloudinary.
+        {hint} · stored on Cloudinary.
       </p>
     </div>
   );

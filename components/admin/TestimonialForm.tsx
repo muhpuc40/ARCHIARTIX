@@ -20,7 +20,7 @@ export function TestimonialForm({ id, defaults }: { id?: string; defaults?: In }
   const editing = Boolean(id);
   const { register, control, handleSubmit, formState: { errors, isSubmitting } } = useForm<In, unknown, Out>({
     resolver: zodResolver(testimonialSchema),
-    defaultValues: defaults ?? { name: "", role: "", location: "", quote: "", rating: 5, avatar_url: null, is_published: true, sort_order: 0 },
+    defaultValues: defaults ?? { name: "", role: "", location: "", quote: "", rating: 5, avatar_url: null, project_photo_url: null, is_published: true, sort_order: 0 },
   });
 
   async function onSubmit(values: Out) {
@@ -57,7 +57,18 @@ export function TestimonialForm({ id, defaults }: { id?: string; defaults?: In }
           <Textarea id="t-quote" rows={6} aria-invalid={!!errors.quote} {...register("quote")} />
         </Field>
         <div>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-700">Photo (optional)</p>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-700">Project photo (optional)</p>
+          <p className="mb-2 text-xs text-neutral-500">Shown beside the testimonial on the home page — a photo of the space you designed for this client.</p>
+          <Controller
+            control={control}
+            name="project_photo_url"
+            render={({ field }) => (
+              <MediaUploader folder="testimonials" max={1} value={field.value ? [field.value] : []} onChange={(urls) => field.onChange(urls[0] ?? null)} />
+            )}
+          />
+        </div>
+        <div>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-700">Client photo (optional)</p>
           <Controller
             control={control}
             name="avatar_url"
@@ -70,7 +81,7 @@ export function TestimonialForm({ id, defaults }: { id?: string; defaults?: In }
       <aside className="space-y-6 self-start border border-line bg-white p-6">
         <Field label="Rating" htmlFor="t-rating" error={errors.rating?.message}>
           <Select id="t-rating" {...register("rating", { valueAsNumber: true })}>
-            {[5, 4, 3, 2, 1].map((n) => <option key={n} value={n}>{"★".repeat(n)} ({n})</option>)}
+            {[5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1].map((n) => <option key={n} value={n}>{n} ★</option>)}
           </Select>
         </Field>
         <Field label="Display order" htmlFor="t-order" error={errors.sort_order?.message} hint="Lower numbers show first">

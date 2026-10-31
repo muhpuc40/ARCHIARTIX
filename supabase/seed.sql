@@ -52,6 +52,6 @@ on conflict (id) do nothing;
 
 insert into public.testimonials (id, name, role, location, quote, rating, avatar_url, is_published, sort_order) values
   ('0d0d0d0d-0000-4000-8000-000000000001', 'Apartment owner', 'Homeowner', 'Dhanmondi, Dhaka', 'They turned a cramped flat into a calm, bright home. The 3D walkthrough meant there were no surprises on site — what we approved is exactly what we got.', 5, null, true, 1),
-  ('0d0d0d0d-0000-4000-8000-000000000002', 'Agency founder', 'Office fit-out', 'Gulshan, Dhaka', 'Clear budgets, weekly updates and a team that actually showed up every day. Our office opened on the date we were promised.', 5, null, true, 2),
+  ('0d0d0d0d-0000-4000-8000-000000000002', 'Agency founder', 'Office fit-out', 'Gulshan, Dhaka', 'Clear budgets, weekly updates and a team that actually showed up every day. Our office opened on the date we were promised.', 4.5, null, true, 2),
   ('0d0d0d0d-0000-4000-8000-000000000003', 'Villa owner', 'Residential', 'Khulshi, Chattogram', 'They understood how the building should breathe in our climate. The courtyard changed how the whole family lives.', 5, null, true, 3)
 on conflict (id) do nothing;

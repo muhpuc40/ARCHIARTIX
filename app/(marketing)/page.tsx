@@ -10,7 +10,7 @@ import { StatsBand } from "@/components/marketing/StatsBand";
 import { Testimonials } from "@/components/marketing/Testimonials";
 import { VRCallout } from "@/components/marketing/VRCallout";
 import { PlanWizard } from "@/components/plan/PlanWizard";
-import { getCategories, getTestimonials } from "@/lib/data";
+import { getCategories, getHeroSlides, getSiteSettings, getTestimonials } from "@/lib/data";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -22,16 +22,16 @@ export const metadata: Metadata = {
 
 // Home intentionally has no Team, Shop or pricing sections (they live on their own routes).
 export default async function HomePage() {
-  const [testimonials, categories] = await Promise.all([getTestimonials(), getCategories("project")]);
+  const [testimonials, categories, heroSlides, media] = await Promise.all([getTestimonials(), getCategories("project"), getHeroSlides(), getSiteSettings()]);
   return (
     <>
-      <Hero />
+      <Hero slides={heroSlides} />
       <StatsBand />
       <AboutIntro />
       <FeaturedProjects />
       <ServicesPreview />
       <ProcessTimeline />
-      <VRCallout />
+      <VRCallout tour3dUrl={media.tour3d_url || siteConfig.tour3dUrl} videoUrl={media.video_url || siteConfig.videoUrl} />
       <Testimonials items={testimonials} />
       <PlanWizard categories={categories.map((c) => ({ id: c.id, name: c.name, slug: c.slug }))} />
       <FAQSection />

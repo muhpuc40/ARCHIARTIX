@@ -1,13 +1,17 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Stars } from "@/components/ui/Stars";
+import { siteConfig } from "@/lib/site";
 import type { Testimonial } from "@/lib/types";
 import { cn } from "@/lib/utils";
+
+const siteName = siteConfig.name;
 
 export function Testimonials({ items }: { items: Testimonial[] }) {
   const [index, setIndex] = useState(0);
@@ -30,14 +34,14 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
       <Container>
         <SectionHeading align="center" eyebrow="Kind words" title="Clients who now love where they live and work" />
         <div
-          className="relative mx-auto mt-14 max-w-4xl"
+          className="relative mx-auto mt-14 max-w-5xl"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}
           onBlur={() => setPaused(false)}
         >
           <Quote size={64} className="absolute -top-8 left-0 text-brand-yellow" aria-hidden strokeWidth={1.5} />
-          <div className="min-h-[260px] border-l-4 border-brand-yellow bg-brand-cream px-8 py-12 sm:px-14" aria-live="polite">
+          <div className="min-h-[260px] overflow-hidden border-l-4 border-brand-yellow bg-brand-cream" aria-live="polite">
             <AnimatePresence mode="wait">
               <motion.figure
                 key={t.id}
@@ -45,28 +49,34 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.45 }}
+                className={cn("grid", t.project_photo_url && "md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]")}
               >
-                <div className="mb-4 flex gap-1 text-brand-yellow-deep" aria-label={`${t.rating} out of 5 stars`}>
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} size={16} fill="currentColor" />
-                  ))}
+                {t.project_photo_url && (
+                  <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[360px]">
+                    <Image src={t.project_photo_url} alt={`Project by ${siteName} for ${t.name}`} fill sizes="(min-width:768px) 40vw, 100vw" className="object-cover" />
+                  </div>
+                )}
+                <div className="flex flex-col justify-center px-8 py-12 sm:px-12">
+                  <Stars value={t.rating} size={18} className="mb-4 text-brand-yellow-deep" />
+                  <blockquote className={cn("font-serif leading-relaxed", t.project_photo_url ? "text-lg sm:text-xl" : "text-xl sm:text-2xl lg:text-[1.65rem]")}>
+                    “{t.quote}”
+                  </blockquote>
+                  <figcaption className="mt-8 flex items-center gap-4 text-sm">
+                    {t.avatar_url ? (
+                      <span className="relative h-12 w-12 overflow-hidden rounded-full bg-ink">
+                        <Image src={t.avatar_url} alt="" fill sizes="48px" className="object-cover" />
+                      </span>
+                    ) : (
+                      <span className="grid h-12 w-12 place-items-center rounded-full bg-ink font-serif text-lg text-brand-yellow" aria-hidden>
+                        {t.name[0]}
+                      </span>
+                    )}
+                    <span>
+                      <span className="block font-bold">{t.name}</span>
+                      {subtitle && <span className="text-neutral-600">{subtitle}</span>}
+                    </span>
+                  </figcaption>
                 </div>
-                <blockquote className="font-serif text-xl leading-relaxed sm:text-2xl lg:text-[1.65rem]">“{t.quote}”</blockquote>
-                <figcaption className="mt-8 flex items-center gap-4 text-sm">
-                  {t.avatar_url ? (
-                    <span className="relative h-12 w-12 overflow-hidden rounded-full bg-ink">
-                      <Image src={t.avatar_url} alt="" fill sizes="48px" className="object-cover" />
-                    </span>
-                  ) : (
-                    <span className="grid h-12 w-12 place-items-center rounded-full bg-ink font-serif text-lg text-brand-yellow" aria-hidden>
-                      {t.name[0]}
-                    </span>
-                  )}
-                  <span>
-                    <span className="block font-bold">{t.name}</span>
-                    {subtitle && <span className="text-neutral-600">{subtitle}</span>}
-                  </span>
-                </figcaption>
               </motion.figure>
             </AnimatePresence>
           </div>
