@@ -10,12 +10,9 @@ import { pageMetadata } from "@/lib/seo";
 type Props = { params: Promise<{ category: string }> };
 
 const blurbs: Record<string, string> = {
-  residential:
-    "Apartments, duplexes and villas shaped around the way families really live.",
-  commercial:
-    "Offices, retail and co-working spaces that look sharp and work hard.",
-  hospitality:
-    "Hotels, restaurants and resorts designed to make guests linger.",
+  residential: "Apartments, duplexes and villas shaped around the way families really live.",
+  commercial: "Offices, retail and co-working spaces that look sharp and work hard.",
+  hospitality: "Hotels, restaurants and resorts designed to make guests linger.",
 };
 
 export async function generateStaticParams() {
@@ -44,14 +41,12 @@ export default async function ProjectCategoryPage({ params }: Props) {
       <PageHeader
         eyebrow="Portfolio"
         title={`${cat.name} projects`}
-        text={
-          blurbs[cat.slug] ??
-          `A selection of our ${cat.name.toLowerCase()} work.`
-        }
+        text={blurbs[cat.slug] ?? `A selection of our ${cat.name.toLowerCase()} work.`}
         crumbs={[
           { name: "Projects", href: "/projects" },
           { name: cat.name, href: `/projects/${cat.slug}` },
-        ]}>
+        ]}
+      >
         <ProjectFilters active={cat.slug} />
       </PageHeader>
       <ProjectGrid projects={projects} />

@@ -37,24 +37,18 @@ export default function TeamPage() {
                   <div className="absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 bg-brand-yellow transition-transform duration-500 group-hover:scale-x-100" />
                 </div>
                 <h2 className="mt-5 font-serif text-2xl">{m.role}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-                  {m.bio}
-                </p>
+                <p className="mt-2 text-sm leading-relaxed text-neutral-600">{m.bio}</p>
               </StaggerItem>
             ))}
           </Stagger>
           {process.env.NODE_ENV !== "production" && (
             <p className="mt-12 border border-dashed border-red-700 p-4 text-sm text-red-700">
-              Dev note: team members are placeholders (roles only). Add real
-              names, photos and bios in lib/content.ts before launch.
+              Dev note: team members are placeholders (roles only). Add real names, photos and bios in lib/content.ts before launch.
             </p>
           )}
         </Container>
       </section>
-      <CTABand
-        title="Want to work with us?"
-        text="We’re always keen to meet clients — and talented designers and engineers. Say hello."
-      />
+      <CTABand title="Want to work with us?" text="We’re always keen to meet clients — and talented designers and engineers. Say hello." />
     </>
   );
 }

@@ -8,7 +8,7 @@ const clean = (v: string | undefined) => (v && v.trim().length > 0 ? v.trim() : 
 
 export const siteConfig = {
   name: "ARCHIARTIX",
-  shortName: "ARCHIARTIX",
+  shortName: "Archiartix",
   tagline: "Art Meets Architecture",
   description:
     "ARCHIARTIX is an interior design and architecture studio in Bangladesh — designing and building residential, commercial and hospitality spaces, with a shop for architecture and design products.",

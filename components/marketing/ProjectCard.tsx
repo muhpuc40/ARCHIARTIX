@@ -21,11 +21,8 @@ export function ProjectCard({
   return (
     <Link
       href={projectHref(project)}
-      className={cn(
-        "group relative block overflow-hidden bg-ink",
-        aspect,
-        className,
-      )}>
+      className={cn("group relative block overflow-hidden bg-ink", aspect, className)}
+    >
       <div className="absolute inset-0 transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]">
         <SmartImage
           src={project.cover_image_url}
@@ -50,16 +47,12 @@ export function ProjectCard({
         <div className="mt-2 flex items-center gap-4 text-xs text-white/70">
           {project.location && (
             <span className="inline-flex items-center gap-1.5">
-              <MapPin size={13} className="text-brand-yellow" />{" "}
-              {project.location}
+              <MapPin size={13} className="text-brand-yellow" /> {project.location}
             </span>
           )}
           {project.year && <span>{project.year}</span>}
         </div>
-        <span
-          className="mt-4 block h-0.5 w-0 bg-brand-yellow transition-all duration-500 group-hover:w-full"
-          aria-hidden
-        />
+        <span className="mt-4 block h-0.5 w-0 bg-brand-yellow transition-all duration-500 group-hover:w-full" aria-hidden />
       </div>
     </Link>
   );

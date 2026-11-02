@@ -15,11 +15,7 @@ export const dynamic = "force-dynamic";
  * don't re-run on client navigation — so every admin page calls requireAdmin() itself,
  * and proxy.ts redirects non-admins before they get here.
  */
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = isSupabaseConfigured ? await getUser() : null;
   const profile = user ? await getProfile() : null;
 

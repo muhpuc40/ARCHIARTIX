@@ -20,7 +20,8 @@ export default async function ProjectsPage() {
         eyebrow="Portfolio"
         title="Projects that balance art and architecture"
         text="Homes, workplaces and hospitality spaces — each designed around the people who use them."
-        crumbs={[{ name: "Projects", href: "/projects" }]}>
+        crumbs={[{ name: "Projects", href: "/projects" }]}
+      >
         <ProjectFilters />
       </PageHeader>
       <ProjectGrid projects={projects} />

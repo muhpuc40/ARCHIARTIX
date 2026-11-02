@@ -14,11 +14,7 @@ export const metadata = pageMetadata({
 export default function CartPage() {
   return (
     <>
-      <PageHeader
-        title="Your cart"
-        crumbs={[{ name: "Cart", href: "/cart" }]}
-        compact
-      />
+      <PageHeader title="Your cart" crumbs={[{ name: "Cart", href: "/cart" }]} compact />
       <section className="py-12 sm:py-16">
         <Container>
           <CartView />

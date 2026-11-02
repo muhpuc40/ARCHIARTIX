@@ -32,16 +32,10 @@ export default function AboutPage() {
             <div className="relative aspect-[4/5] overflow-hidden bg-ink">
               <PlaceholderArt seed="our-story" />
             </div>
-            <div
-              className="absolute -bottom-4 -right-4 hidden h-28 w-28 border-b-4 border-r-4 border-brand-yellow sm:block"
-              aria-hidden
-            />
+            <div className="absolute -bottom-4 -right-4 hidden h-28 w-28 border-b-4 border-r-4 border-brand-yellow sm:block" aria-hidden />
           </Reveal>
           <div className="order-1 lg:order-2">
-            <SectionHeading
-              eyebrow="Our story"
-              title="Designing for how Bangladesh lives"
-            />
+            <SectionHeading eyebrow="Our story" title="Designing for how Bangladesh lives" />
             <div className="mt-8 space-y-5 text-lg leading-relaxed text-neutral-700">
               {story.map((p, i) => (
                 <Reveal key={i} delay={0.05 * i}>
@@ -49,19 +43,9 @@ export default function AboutPage() {
                 </Reveal>
               ))}
             </div>
-            <Reveal
-              delay={0.2}
-              className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold uppercase tracking-[0.14em]">
-              <Link
-                href="/about/team"
-                className="underline decoration-brand-yellow decoration-2 underline-offset-8 hover:text-charcoal">
-                Meet our team
-              </Link>
-              <Link
-                href="/about/mission-vision"
-                className="underline decoration-brand-yellow decoration-2 underline-offset-8 hover:text-charcoal">
-                Mission & vision
-              </Link>
+            <Reveal delay={0.2} className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold uppercase tracking-[0.14em]">
+              <Link href="/about/team" className="underline decoration-brand-yellow decoration-2 underline-offset-8 hover:text-charcoal">Meet our team</Link>
+              <Link href="/about/mission-vision" className="underline decoration-brand-yellow decoration-2 underline-offset-8 hover:text-charcoal">Mission & vision</Link>
             </Reveal>
           </div>
         </Container>
@@ -71,24 +55,13 @@ export default function AboutPage() {
 
       <section className="py-20 sm:py-28">
         <Container>
-          <SectionHeading
-            eyebrow="Our values"
-            title="What we hold ourselves to"
-          />
+          <SectionHeading eyebrow="Our values" title="What we hold ourselves to" />
           <Stagger className="mt-14 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
             {values.map((v, i) => (
-              <StaggerItem
-                key={v.title}
-                className="bg-white p-8 transition-colors hover:bg-brand-cream">
-                <span className="font-serif text-5xl font-bold text-brand-yellow">
-                  0{i + 1}
-                </span>
-                <h3 className="mt-4 font-sans text-sm font-bold uppercase tracking-[0.14em]">
-                  {v.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-neutral-600">
-                  {v.text}
-                </p>
+              <StaggerItem key={v.title} className="bg-white p-8 transition-colors hover:bg-brand-cream">
+                <span className="font-serif text-5xl font-bold text-brand-yellow">0{i + 1}</span>
+                <h3 className="mt-4 font-sans text-sm font-bold uppercase tracking-[0.14em]">{v.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-neutral-600">{v.text}</p>
               </StaggerItem>
             ))}
           </Stagger>

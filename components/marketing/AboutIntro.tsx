@@ -14,30 +14,20 @@ export function AboutIntro() {
             eyebrow="Who we are"
             title={
               <>
-                Where <span className="italic text-charcoal">art</span> meets
-                the discipline of{" "}
-                <span className="underline decoration-brand-yellow decoration-4 underline-offset-8">
-                  architecture
-                </span>
+                Where <span className="italic text-charcoal">art</span> meets the discipline of{" "}
+                <span className="underline decoration-brand-yellow decoration-4 underline-offset-8">architecture</span>
               </>
             }
           />
           <Reveal delay={0.1}>
             <p className="mt-7 text-base leading-relaxed text-neutral-600 sm:text-lg">
-              ARCHIARTIX is a studio of architects, interior designers and site
-              engineers. We believe a building is a canvas for light, texture
-              and proportion — and an interior is where that art meets daily
-              life.
+              ARCHIARTIX is a studio of architects, interior designers and site engineers. We believe a building is a
+              canvas for light, texture and proportion — and an interior is where that art meets daily life.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
             <ul className="mt-8 grid gap-3 text-sm font-medium sm:grid-cols-2">
-              {[
-                "Design, build and furnish — one team",
-                "Transparent budgets, priced drawings",
-                "3D & VR walkthroughs before construction",
-                "Daily site supervision, weekly reports",
-              ].map((t) => (
+              {["Design, build and furnish — one team", "Transparent budgets, priced drawings", "3D & VR walkthroughs before construction", "Daily site supervision, weekly reports"].map((t) => (
                 <li key={t} className="flex items-start gap-3">
                   <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-yellow">
                     <Check size={13} strokeWidth={3} />
@@ -60,14 +50,9 @@ export function AboutIntro() {
           </div>
           <div className="absolute -bottom-6 -left-4 hidden bg-brand-yellow p-6 shadow-xl sm:block">
             <p className="font-serif text-4xl font-bold leading-none">10+</p>
-            <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em]">
-              Years of practice
-            </p>
+            <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em]">Years of practice</p>
           </div>
-          <div
-            className="absolute -right-3 -top-3 h-24 w-24 border-r-4 border-t-4 border-brand-yellow"
-            aria-hidden
-          />
+          <div className="absolute -right-3 -top-3 h-24 w-24 border-r-4 border-t-4 border-brand-yellow" aria-hidden />
         </Reveal>
       </Container>
     </section>

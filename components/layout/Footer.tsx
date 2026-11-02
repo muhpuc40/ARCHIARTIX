@@ -2,13 +2,7 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  LinkedinIcon,
-  WhatsAppIcon,
-  YoutubeIcon,
-} from "@/components/ui/Icons";
+import { FacebookIcon, InstagramIcon, LinkedinIcon, WhatsAppIcon, YoutubeIcon } from "@/components/ui/Icons";
 import { siteConfig, whatsappLink, WHATSAPP_GREETING } from "@/lib/site";
 
 const socials = [
@@ -46,16 +40,10 @@ export function Footer() {
       <div className="h-1 w-full bg-brand-yellow" aria-hidden />
       <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
         <div>
-          <Image
-            src="/brand/logo-light.png"
-            alt="ARCHIARTIX"
-            width={1076}
-            height={703}
-            className="h-24 w-auto"
-          />
+          <Image src="/brand/logo-light.png" alt="ARCHIARTIX" width={1076} height={703} className="h-24 w-auto" />
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/65">
-            Interior design and architecture studio in Bangladesh — designing,
-            building and furnishing spaces where art meets architecture.
+            Interior design and architecture studio in Bangladesh — designing, building and furnishing spaces where art
+            meets architecture.
           </p>
           {activeSocials.length > 0 && (
             <div className="mt-6 flex gap-3">
@@ -66,7 +54,8 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-white/20 transition-colors hover:border-brand-yellow hover:bg-brand-yellow hover:text-ink">
+                  className="grid h-10 w-10 place-items-center rounded-full border border-white/20 transition-colors hover:border-brand-yellow hover:bg-brand-yellow hover:text-ink"
+                >
                   <Icon size={17} />
                 </a>
               ))}
@@ -78,52 +67,32 @@ export function Footer() {
         <FooterList title="Services" links={services} />
 
         <div>
-          <h3 className="mb-5 font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-yellow">
-            Contact
-          </h3>
+          <h3 className="mb-5 font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-yellow">Contact</h3>
           <ul className="space-y-3.5 text-sm text-white/75">
             <li className="flex gap-3">
-              <MapPin size={17} className="mt-0.5 shrink-0 text-brand-yellow" />{" "}
-              {siteConfig.address}
+              <MapPin size={17} className="mt-0.5 shrink-0 text-brand-yellow" /> {siteConfig.address}
             </li>
             {siteConfig.phone && (
               <li>
-                <a
-                  href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-                  className="flex gap-3 hover:text-brand-yellow">
-                  <Phone
-                    size={17}
-                    className="mt-0.5 shrink-0 text-brand-yellow"
-                  />{" "}
-                  {siteConfig.phone}
+                <a href={`tel:${siteConfig.phone.replace(/\s/g, "")}`} className="flex gap-3 hover:text-brand-yellow">
+                  <Phone size={17} className="mt-0.5 shrink-0 text-brand-yellow" /> {siteConfig.phone}
                 </a>
               </li>
             )}
             {siteConfig.email && (
               <li>
-                <a
-                  href={`mailto:${siteConfig.email}`}
-                  className="flex gap-3 hover:text-brand-yellow">
-                  <Mail
-                    size={17}
-                    className="mt-0.5 shrink-0 text-brand-yellow"
-                  />{" "}
-                  {siteConfig.email}
+                <a href={`mailto:${siteConfig.email}`} className="flex gap-3 hover:text-brand-yellow">
+                  <Mail size={17} className="mt-0.5 shrink-0 text-brand-yellow" /> {siteConfig.email}
                 </a>
               </li>
             )}
             <li>
-              <a
-                href={whatsappLink(WHATSAPP_GREETING)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex gap-3 hover:text-brand-yellow">
+              <a href={whatsappLink(WHATSAPP_GREETING)} target="_blank" rel="noopener noreferrer" className="flex gap-3 hover:text-brand-yellow">
                 <WhatsAppIcon size={17} /> Chat on WhatsApp
               </a>
             </li>
             <li className="flex gap-3">
-              <Clock size={17} className="mt-0.5 shrink-0 text-brand-yellow" />{" "}
-              {siteConfig.hours}
+              <Clock size={17} className="mt-0.5 shrink-0 text-brand-yellow" /> {siteConfig.hours}
             </li>
           </ul>
         </div>
@@ -134,14 +103,9 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
-          <nav
-            aria-label="Legal"
-            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             {legal.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className="transition-colors hover:text-brand-yellow">
+              <Link key={l.href} href={l.href} className="transition-colors hover:text-brand-yellow">
                 {l.label}
               </Link>
             ))}
@@ -152,24 +116,14 @@ export function Footer() {
   );
 }
 
-function FooterList({
-  title,
-  links,
-}: {
-  title: string;
-  links: { label: string; href: string }[];
-}) {
+function FooterList({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <nav aria-label={title}>
-      <h3 className="mb-5 font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-yellow">
-        {title}
-      </h3>
+      <h3 className="mb-5 font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-yellow">{title}</h3>
       <ul className="space-y-3 text-sm text-white/75">
         {links.map((l) => (
           <li key={l.href + l.label}>
-            <Link
-              href={l.href}
-              className="inline-block transition-all hover:translate-x-1 hover:text-brand-yellow">
+            <Link href={l.href} className="inline-block transition-all hover:translate-x-1 hover:text-brand-yellow">
               {l.label}
             </Link>
           </li>
