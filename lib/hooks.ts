@@ -6,16 +6,37 @@ const FOCUSABLE =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /** Locks page scroll while `active` (drawers, modals). */
+let scrollLocks = 0;
+
 export function useLockBodyScroll(active: boolean) {
   useEffect(() => {
     if (!active) return;
-    const { overflow, paddingRight } = document.body.style;
-    const scrollbar = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = "hidden";
-    if (scrollbar > 0) document.body.style.paddingRight = `${scrollbar}px`;
+    const html = document.documentElement;
+    const body = document.body;
+    const prev = {
+      htmlOverflow: html.style.overflow,
+      htmlOverscroll: html.style.overscrollBehavior,
+      bodyOverflow: body.style.overflow,
+      bodyPadding: body.style.paddingRight,
+    };
+    // The page scrolls on <html> (we clip sideways overflow on html/body), so the lock has to sit on <html> too;
+    // locking <body> alone leaves the page scrollable underneath the panel.
+    if (scrollLocks === 0) {
+      const scrollbar = window.innerWidth - html.clientWidth;
+      html.style.overflow = "hidden";
+      html.style.overscrollBehavior = "none";
+      body.style.overflow = "hidden";
+      if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
+    }
+    scrollLocks += 1;
     return () => {
-      document.body.style.overflow = overflow;
-      document.body.style.paddingRight = paddingRight;
+      scrollLocks -= 1;
+      if (scrollLocks === 0) {
+        html.style.overflow = prev.htmlOverflow;
+        html.style.overscrollBehavior = prev.htmlOverscroll;
+        body.style.overflow = prev.bodyOverflow;
+        body.style.paddingRight = prev.bodyPadding;
+      }
     };
   }, [active]);
 }

@@ -69,6 +69,29 @@ body {
   }
 }
 
+/* Branded scrollbars: charcoal track, yellow thumb (matches the logo) instead of the browser default. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-brand-yellow-deep) var(--color-ink);
+}
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-brand-yellow-deep);
+    border: 2px solid var(--color-ink);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-brand-yellow);
+  }
+}
+
 body {
   background: #fff;
   color: var(--color-ink);

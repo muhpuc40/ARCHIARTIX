@@ -4,7 +4,7 @@ import { ChevronDown, Clock, LogIn, Mail, MapPin, Phone, UserRound } from "lucid
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { InstallButton } from "@/components/layout/InstallButton";
+// import { InstallButton } from "@/components/layout/InstallButton"; // install-app button hidden for now
 import { useUI } from "@/components/providers/UIProvider";
 import { ButtonLink } from "@/components/ui/Button";
 import { Drawer } from "@/components/ui/Drawer";
@@ -27,7 +27,7 @@ export function SideDrawer() {
   const activeSocials = socials.filter((s) => siteConfig.social[s.key]);
 
   return (
-    <Drawer open={menuOpen} onClose={closeMenu} label="Site menu" tone="dark" className="overflow-y-auto">
+    <Drawer open={menuOpen} onClose={closeMenu} label="Site menu" tone="dark" className="overflow-y-auto overscroll-contain">
       <div className="flex flex-1 flex-col gap-8 px-7 pb-8 pt-8">
         <div>
           <Image src="/brand/logo-light.png" alt="ARCHIARTIX" width={1076} height={703} className="h-20 w-auto" />
@@ -79,7 +79,7 @@ export function SideDrawer() {
           <ButtonLink href="/contact?type=quote#quote" onClick={closeMenu} size="lg">
             Get a Quote
           </ButtonLink>
-          <InstallButton className="w-full" />
+          {/* <InstallButton className="w-full" /> — hidden for now, re-enable when the app install is ready */}
         </div>
 
         <div className="space-y-3 text-sm text-white/80">
