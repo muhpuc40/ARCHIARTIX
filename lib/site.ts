@@ -11,7 +11,7 @@ export const siteConfig = {
   shortName: "Archiartix",
   tagline: "Art Meets Architecture",
   description:
-    "ARCHIARTIX is an interior design and architecture studio in Bangladesh — designing and building residential, commercial and hospitality spaces, with a shop for architecture and design products.",
+    "ARCHIARTIX is an interior design and architecture studio in Bangladesh — designing and building residential, commercial and hospitality spaces, with a Collection of architecture and design products.",
   url: siteUrl,
   locale: "en_BD",
   // digits only, country code included, e.g. 8801XXXXXXXXX

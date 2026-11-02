@@ -28,9 +28,9 @@ export default async function ServicesPage() {
       <section className="py-16 sm:py-24">
         <Container>
           <Stagger className="grid gap-6 lg:grid-cols-3">
-            {services.map((s, i) => (
+            {services.map((s) => (
               <StaggerItem key={s.id}>
-                <ServiceCard service={s} index={i} />
+                <ServiceCard service={s} />
               </StaggerItem>
             ))}
           </Stagger>

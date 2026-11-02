@@ -19,7 +19,7 @@ const SERVICES = [
   "Architectural design",
   "Turnkey execution",
   "3D / VR walkthrough",
-  "Shop / product enquiry",
+  "Collection / product enquiry",
   "Something else",
 ];
 

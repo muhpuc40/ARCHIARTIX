@@ -31,7 +31,7 @@ export function CartDrawer() {
           <p className="font-serif text-2xl">Your cart is empty</p>
           <p className="text-sm text-neutral-600">Browse our architecture & design products and add your favourites.</p>
           <ButtonLink href="/shop" onClick={closeCart}>
-            Explore the shop
+            Explore the Collection
           </ButtonLink>
         </div>
       ) : (

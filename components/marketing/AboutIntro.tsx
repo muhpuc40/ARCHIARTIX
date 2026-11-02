@@ -49,7 +49,7 @@ export function AboutIntro() {
             <PlaceholderArt seed="about-intro" tone="dark" />
           </div>
           <div className="absolute -bottom-6 -left-4 hidden bg-brand-yellow p-6 shadow-xl sm:block">
-            <p className="font-serif text-4xl font-bold leading-none">10+</p>
+            <p className="font-serif text-4xl font-bold leading-none">5+</p>
             <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em]">Years of practice</p>
           </div>
           <div className="absolute -right-3 -top-3 h-24 w-24 border-r-4 border-t-4 border-brand-yellow" aria-hidden />

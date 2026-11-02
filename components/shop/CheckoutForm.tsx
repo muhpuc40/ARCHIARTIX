@@ -111,7 +111,7 @@ export function CheckoutForm({
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <ButtonLink href="/account/orders">View my orders</ButtonLink>
-          <ButtonLink href="/shop" variant="outline">Keep shopping</ButtonLink>
+          <ButtonLink href="/shop" variant="outline">Keep browsing</ButtonLink>
         </div>
       </div>
     );
@@ -228,7 +228,7 @@ export function CheckoutForm({
       ) : (
         <div className="space-y-5 border-t-4 border-brand-yellow bg-brand-cream p-8">
           <h2 className="font-serif text-2xl">Online ordering isn’t connected yet</h2>
-          <p className="text-neutral-700">The store backend (Supabase) hasn’t been configured, so orders can’t be saved. You can still send this order to us on WhatsApp.</p>
+          <p className="text-neutral-700">The order backend (Supabase) hasn’t been configured, so orders can’t be saved. You can still send this order to us on WhatsApp.</p>
           <a href={whatsappLink(waText)} target="_blank" rel="noopener noreferrer" className="inline-flex h-14 items-center justify-center bg-ink px-8 text-xs font-semibold uppercase tracking-[0.12em] text-white hover:bg-brand-yellow hover:text-ink">
             Send order on WhatsApp
           </a>

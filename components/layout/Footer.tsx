@@ -15,7 +15,7 @@ const socials = [
 const explore = [
   { label: "Projects", href: "/projects" },
   { label: "Services", href: "/services" },
-  { label: "Shop", href: "/shop" },
+  { label: "Collection", href: "/shop" },
   { label: "About Us", href: "/about" },
   { label: "Meet the Team", href: "/about/team" },
   { label: "Contact", href: "/contact" },

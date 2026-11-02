@@ -22,7 +22,7 @@ export function OrderStatusControl({ id, status }: { id: string; status: OrderSt
   const next = ORDER_TRANSITIONS[status];
 
   async function move(to: OrderStatus) {
-    if (to === "cancelled" && !window.confirm("Cancel this order? Stock will be returned to the shop.")) return;
+    if (to === "cancelled" && !window.confirm("Cancel this order? Stock will be returned to the collection.")) return;
     setBusy(to);
     const res = await fetch(`/api/orders/${id}`, {
       method: "PATCH",

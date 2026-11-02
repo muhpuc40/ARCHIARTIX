@@ -33,7 +33,7 @@ export const navItems: NavItem[] = [
       { label: "Turnkey Execution", href: "/services/turnkey-execution", description: "Design to handover" },
     ],
   },
-  { label: "Shop", href: "/shop" },
+  { label: "Collection", href: "/shop" },
   {
     label: "About Us",
     href: "/about",
@@ -106,7 +106,7 @@ export const faqs = [
     a: "Design fees are paid in stages (on proposal, on concept approval and on final drawings). Execution is billed against agreed milestones. There are no hidden charges — every payment is tied to a delivered stage.",
   },
   {
-    q: "How do I order from the shop?",
+    q: "How do I order from the Collection?",
     a: "Sign in with Google, add products to your cart and check out. We confirm every order by phone, and pay on delivery is available across Bangladesh.",
   },
 ];
@@ -134,5 +134,5 @@ export const vision =
 export const story = [
   "ARCHIARTIX began with a simple belief: art and architecture should not be separate conversations. A building is a canvas for light, texture and proportion; an interior is where that art meets daily life.",
   "Today we are a team of architects, interior designers and site engineers working across Bangladesh — from city apartments to resort suites. We stay close to every project, from the first sketch to the last coat of paint.",
-  "Alongside our design practice we run a small shop of architecture and design products we use and love, so clients can bring a piece of the studio home.",
+  "Alongside our design practice we curate a small Collection of architecture and design products we use and love, so clients can bring a piece of the studio home.",
 ];

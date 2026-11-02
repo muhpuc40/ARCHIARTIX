@@ -61,7 +61,7 @@ export default async function ProductPage({ params }: Props) {
       <PageHeader
         title={product.name}
         crumbs={[
-          { name: "Shop", href: "/shop" },
+          { name: "Collection", href: "/shop" },
           { name: product.name, href: `/shop/${product.slug}` },
         ]}
         compact

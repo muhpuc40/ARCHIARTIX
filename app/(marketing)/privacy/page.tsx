@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Privacy Policy",
-  description: "How ARCHIARTIX collects, uses and protects your personal information when you use our website, shop and quote tools.",
+  description: "How ARCHIARTIX collects, uses and protects your personal information when you use our website, Collection and quote tools.",
   path: "/privacy",
 });
 
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
           title: "Information we collect",
           body: (
             <>
-              <p>We only collect what we need to respond to you and to run the studio and shop:</p>
+              <p>We only collect what we need to respond to you and to run the studio and the Collection:</p>
               <ul>
                 <li><strong>Contact &amp; quote requests</strong> — name, phone, email, project details and anything you write in the message.</li>
                 <li><strong>“Make your plan” estimates</strong> — space type, size, rooms, add-ons, chosen package and your contact details.</li>

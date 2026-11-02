@@ -16,11 +16,11 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: { absolute: `${siteConfig.name} — ${siteConfig.tagline} | Interior Design & Architecture in Bangladesh` },
   description:
-    "ARCHIARTIX designs, builds and furnishes homes, offices and hospitality spaces across Bangladesh. Interior design, architectural design and turnkey execution — plus a shop for design products.",
+    "ARCHIARTIX designs, builds and furnishes homes, offices and hospitality spaces across Bangladesh. Interior design, architectural design and turnkey execution — plus a Collection of design products.",
   alternates: { canonical: "/" },
 };
 
-// Home intentionally has no Team, Shop or pricing sections (they live on their own routes).
+// Home intentionally has no Team, Collection or pricing sections (they live on their own routes).
 export default async function HomePage() {
   const [testimonials, categories, heroSlides, media] = await Promise.all([getTestimonials(), getCategories("project"), getHeroSlides(), getSiteSettings()]);
   return (

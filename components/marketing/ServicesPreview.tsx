@@ -16,9 +16,9 @@ export async function ServicesPreview() {
           text="Pick a single service or let us take the whole project from first sketch to finished space."
         />
         <Stagger className="mt-14 grid gap-6 lg:grid-cols-3">
-          {services.map((s, i) => (
+          {services.map((s) => (
             <StaggerItem key={s.id}>
-              <ServiceCard service={s} index={i} dark />
+              <ServiceCard service={s} />
             </StaggerItem>
           ))}
         </Stagger>

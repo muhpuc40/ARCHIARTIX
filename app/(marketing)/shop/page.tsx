@@ -9,9 +9,9 @@ import { getCategories, getProducts, type ProductQuery } from "@/lib/data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Shop — Architecture & Design Products",
+  title: "Collection — Architecture & Design Products",
   description:
-    "Shop lighting, furniture, décor, surfaces and studio tools curated by ARCHIARTIX. Prices in BDT, delivery across Bangladesh, pay on delivery available.",
+    "Explore lighting, furniture, décor, surfaces and studio tools curated by ARCHIARTIX. Prices in BDT, delivery across Bangladesh, pay on delivery available.",
   path: "/shop",
 });
 
@@ -30,10 +30,10 @@ export default async function ShopPage({ searchParams }: Props) {
   return (
     <>
       <PageHeader
-        eyebrow="The shop"
+        eyebrow="The Collection"
         title="Design pieces, curated by our studio"
         text="Lighting, furniture, surfaces and tools we specify in our own projects — available to take home."
-        crumbs={[{ name: "Shop", href: "/shop" }]}
+        crumbs={[{ name: "Collection", href: "/shop" }]}
         compact
       />
       <section className="py-12 sm:py-16">

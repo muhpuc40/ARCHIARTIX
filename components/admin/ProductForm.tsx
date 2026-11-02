@@ -121,7 +121,7 @@ export function ProductForm({
           <input type="checkbox" className="mt-1 h-4 w-4 accent-[#1b1b1b]" {...register("is_published")} />
           <span className="text-sm">
             <span className="block font-semibold">Published</span>
-            <span className="text-neutral-500">Visible in the shop. Untick to keep it as a draft.</span>
+            <span className="text-neutral-500">Visible in the collection. Untick to keep it as a draft.</span>
           </span>
         </label>
         <div className="flex flex-col gap-3">

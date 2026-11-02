@@ -42,7 +42,7 @@
     "tsx": "^4.23.15",
     "typescript": "^5"
   },
-  "description": "ARCHIARTIX — Art Meets Architecture. Interior design & architecture studio website, shop and admin (Next.js + Supabase).",
+  "description": "ARCHIARTIX — Art Meets Architecture. Interior design & architecture studio website, Collection and admin (Next.js + Supabase).",
   "engines": {
     "node": ">=20.9.0"
   }

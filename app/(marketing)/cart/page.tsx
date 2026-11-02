@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Your Cart",
-  description: "Review the items in your ARCHIARTIX shop cart.",
+  description: "Review the items in your ARCHIARTIX cart.",
   path: "/cart",
   noindex: true,
 });

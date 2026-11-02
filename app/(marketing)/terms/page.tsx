@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Terms of Service",
-  description: "The terms that apply when you use the ARCHIARTIX website, request a quote, or buy from our shop.",
+  description: "The terms that apply when you use the ARCHIARTIX website, request a quote, or buy from our Collection.",
   path: "/terms",
 });
 
@@ -16,7 +16,7 @@ export default function TermsPage() {
       title="Terms of Service"
       path="/terms"
       updated="31 October 2026"
-      intro={`These terms apply when you use the ${siteConfig.name} website, request a quote or estimate, or buy from our shop. By using the site you agree to them.`}
+      intro={`These terms apply when you use the ${siteConfig.name} website, request a quote or estimate, or buy from our Collection. By using the site you agree to them.`}
       sections={[
         {
           title: "About us",
@@ -48,7 +48,7 @@ export default function TermsPage() {
           ),
         },
         {
-          title: "Shop orders and prices",
+          title: "Collection orders and prices",
           body: (
             <ul>
               <li>All prices are in Bangladeshi Taka (BDT, ৳). Prices and availability can change without notice.</li>

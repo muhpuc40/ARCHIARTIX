@@ -32,7 +32,7 @@ export default async function OrdersPage() {
             <div className="flex flex-col items-center gap-5 border border-dashed border-neutral-300 py-24 text-center">
               <PackageOpen size={44} className="text-neutral-400" />
               <p className="font-serif text-3xl">No orders yet</p>
-              <ButtonLink href="/shop">Start shopping</ButtonLink>
+              <ButtonLink href="/shop">Explore the Collection</ButtonLink>
             </div>
           ) : (
             orders.map((o) => (

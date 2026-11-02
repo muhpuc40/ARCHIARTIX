@@ -10,7 +10,7 @@ import { safeNext } from "@/lib/utils";
 
 export const metadata = pageMetadata({
   title: "Sign in",
-  description: "Sign in to ARCHIARTIX with Google to order from the shop and track your orders.",
+  description: "Sign in to ARCHIARTIX with Google to order from the Collection and track your orders.",
   path: "/login",
   noindex: true,
 });
@@ -35,7 +35,7 @@ export default async function LoginPage({ searchParams }: Props) {
         <Link href="/" className="relative"><Image src="/brand/logo-light.png" alt="ARCHIARTIX" width={1076} height={703} className="h-24 w-auto" priority /></Link>
         <div className="relative max-w-md">
           <p className="font-serif text-4xl leading-tight">Welcome back to <span className="text-brand-yellow">ARCHIARTIX</span>.</p>
-          <p className="mt-4 text-white/70">Sign in to order from the shop, track deliveries and keep your details handy.</p>
+          <p className="mt-4 text-white/70">Sign in to order from the Collection, track deliveries and keep your details handy.</p>
         </div>
       </section>
 
