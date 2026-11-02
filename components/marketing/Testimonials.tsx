@@ -40,7 +40,10 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
           onFocus={() => setPaused(true)}
           onBlur={() => setPaused(false)}
         >
-          <Quote size={64} className="absolute -top-8 left-0 text-brand-yellow" aria-hidden strokeWidth={1.5} />
+          {/* z-20: the animated card below creates its own stacking layer and would otherwise cover this badge */}
+          <span className="absolute -top-5 left-4 z-20 grid h-12 w-12 place-items-center bg-brand-yellow text-ink shadow-md sm:left-0 sm:-top-6 sm:h-14 sm:w-14" aria-hidden>
+            <Quote size={26} strokeWidth={2} fill="currentColor" />
+          </span>
           <div className="min-h-[260px] overflow-hidden border-l-4 border-brand-yellow bg-brand-cream" aria-live="polite">
             <AnimatePresence mode="wait">
               <motion.figure
@@ -81,7 +84,7 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
             </AnimatePresence>
           </div>
           {count > 1 && (
-            <div className="mt-6 flex items-center justify-between">
+            <div className="relative z-20 mt-6 flex items-center justify-between">
               <div className="flex gap-2" role="tablist" aria-label="Choose testimonial">
                 {items.map((item, i) => (
                   <button

@@ -45,6 +45,30 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Never allow sideways page scroll on phones. Scroll-reveal animations start a few px off to the side and decorative
+   shapes bleed past the edge; `clip` hides that without breaking position: sticky (older browsers fall back to hidden). */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}
+
+/* Decorative shapes and SVG line-art are allowed to bleed past a section's edge; contain them per section so the
+   document itself is never wider than the screen (a real fix, not just hiding the scrollbar). */
+@supports (overflow: clip) {
+  main,
+  section,
+  footer {
+    overflow-x: clip;
+  }
+}
+
 body {
   background: #fff;
   color: var(--color-ink);
