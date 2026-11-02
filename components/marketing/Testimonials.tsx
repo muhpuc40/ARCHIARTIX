@@ -30,11 +30,11 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
   const subtitle = [t.role, t.location].filter(Boolean).join(" · ");
 
   return (
-    <section className="py-24 sm:py-32" aria-roledescription="carousel" aria-label="Client testimonials">
+    <section className="py-16 sm:py-24" aria-roledescription="carousel" aria-label="Client testimonials">
       <Container>
         <SectionHeading align="center" eyebrow="Kind words" title="Clients who now love where they live and work" />
         <div
-          className="relative mx-auto mt-14 max-w-5xl"
+          className="relative mx-auto mt-12 max-w-5xl"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}

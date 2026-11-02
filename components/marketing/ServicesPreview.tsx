@@ -7,7 +7,7 @@ import { getServices } from "@/lib/data";
 export async function ServicesPreview() {
   const services = await getServices();
   return (
-    <section className="blueprint-bg relative overflow-hidden bg-ink py-24 sm:py-32">
+    <section className="blueprint-bg relative overflow-hidden bg-ink py-16 sm:py-24">
       <Container className="relative">
         <SectionHeading
           tone="dark"
@@ -15,7 +15,7 @@ export async function ServicesPreview() {
           title="One studio. Design to handover."
           text="Pick a single service or let us take the whole project from first sketch to finished space."
         />
-        <Stagger className="mt-14 grid gap-6 lg:grid-cols-3">
+        <Stagger className="mt-10 grid gap-6 lg:grid-cols-3">
           {services.map((s) => (
             <StaggerItem key={s.id}>
               <ServiceCard service={s} />

@@ -5,7 +5,7 @@ import { stats } from "@/lib/content";
 
 export function StatsBand() {
   return (
-    <section aria-label="ARCHIARTIX in numbers" className="diag-top relative -mt-10 bg-brand-yellow pb-16 pt-24 text-ink">
+    <section aria-label="ARCHIARTIX in numbers" className="diag-top relative -mt-10 bg-brand-yellow pb-12 pt-20 text-ink">
       <Container>
         <Stagger className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
           {stats.map((s) => (

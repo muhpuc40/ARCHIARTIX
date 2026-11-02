@@ -166,7 +166,7 @@ export function PlanWizard({ categories }: { categories: Cat[] }) {
   const summaryText = `Hi ARCHIARTIX, I just made a plan on your website.\nSpace: ${category?.name}\nStatus: ${flatLabel}${size ? `\nSize: ${size} sqft` : ""}\nRooms: ${rooms.map((r) => `${r.count} × ${r.name}`).join(", ")}\nPackage: ${pkgName}`;
 
   return (
-    <section id="plan" className="bg-brand-cream py-20 sm:py-28" aria-labelledby="plan-title">
+    <section id="plan" className="bg-brand-cream py-16 sm:py-20" aria-labelledby="plan-title">
       <Container>
         <div className="mx-auto max-w-4xl text-center">
           <p className="mb-4 inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-neutral-700">

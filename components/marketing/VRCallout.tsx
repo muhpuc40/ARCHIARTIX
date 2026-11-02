@@ -5,7 +5,7 @@ import { WalkthroughMedia } from "@/components/marketing/WalkthroughMedia";
 
 export function VRCallout({ videoUrl, tour3dUrl }: { videoUrl: string; tour3dUrl: string }) {
   return (
-    <section className="bg-brand-cream py-20 sm:py-24">
+    <section className="bg-brand-cream py-14 sm:py-20">
       <Container>
         <div className="bg-ink p-6 text-white sm:p-12">
           <Reveal className="grid items-end gap-8 lg:grid-cols-[1.3fr_1fr]">

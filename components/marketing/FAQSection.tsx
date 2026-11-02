@@ -18,7 +18,7 @@ export function FAQSection() {
   };
 
   return (
-    <section className="bg-brand-cream py-24 sm:py-32">
+    <section className="bg-brand-cream py-16 sm:py-24">
       <Container className="grid gap-14 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <SectionHeading eyebrow="FAQ" title="Questions, answered" text="Can’t find what you’re looking for? Talk to us — we reply within one working day." />

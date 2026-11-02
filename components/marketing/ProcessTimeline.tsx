@@ -5,14 +5,14 @@ import { processSteps } from "@/lib/content";
 
 export function ProcessTimeline() {
   return (
-    <section className="py-20 sm:py-28 lg:py-32">
+    <section className="py-16 sm:py-20 lg:py-24">
       <Container>
         <SectionHeading
           eyebrow="How we work"
           title="A clear process, from first call to final handover"
           text="Five stages, each with defined deliverables — so you always know what happens next."
         />
-        <ol className="relative mt-12 grid gap-8 sm:mt-16 lg:grid-cols-5 lg:gap-6">
+        <ol className="relative mt-10 grid gap-8 sm:mt-12 lg:grid-cols-5 lg:gap-6">
           <span
             className="absolute left-[19px] top-2 h-[calc(100%-1rem)] w-px bg-line lg:left-0 lg:top-[19px] lg:h-px lg:w-full"
             aria-hidden

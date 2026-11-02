@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export function AboutIntro() {
   return (
-    <section id="intro" className="scroll-mt-24 py-24 sm:py-32">
+    <section id="intro" className="scroll-mt-24 py-16 sm:py-24">
       <Container className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
         <div>
           <SectionHeading

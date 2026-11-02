@@ -12,7 +12,7 @@ export function CTABand({
   text?: string;
 }) {
   return (
-    <section className="diag-bottom relative overflow-hidden bg-brand-yellow pb-28 pt-20 text-ink sm:pt-24">
+    <section className="diag-bottom relative overflow-hidden bg-brand-yellow pb-24 pt-16 text-ink sm:pt-20">
       <svg className="pointer-events-none absolute -right-10 top-0 h-full w-1/2 opacity-30" viewBox="0 0 400 300" fill="none" preserveAspectRatio="xMaxYMid slice" aria-hidden>
         <path d="M250 -10 L390 310" stroke="#1b1b1b" strokeWidth="3" />
         <path d="M150 310 L250 100 L300 200" stroke="#1b1b1b" strokeWidth="2" />
